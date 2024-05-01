@@ -4,25 +4,36 @@ import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
 import PageModal from '@/Pages/Employee/Modal/IndexModal.vue';
 import notify from "@/common/notification.js";
-import { Link, Head, usePage, router } from '@inertiajs/vue3';
+import { Link, Head, usePage, router, useForm } from '@inertiajs/vue3';
 import { onMounted, ref} from "vue";
+const page = usePage();
 
-const page = usePage()
+const employeeTypes = ref(page.props.employeeTypes);
+const designations = ref(page.props.designations);
+
 const table = ref({});
 const modalAttrs = ref({
     modalId: "employee-modal",
     title: "EMPLOYEE",
     action: "",
 });
+
+const form = useForm({
+    employee_type: "",
+    department: "",
+});
+
 const reloadDatatableAjax = () => {
     modalAttrs.value.action = "";
     table.value.ajax.reload();
 };
-const reloadDatatable = () => {
+
+const reloadDatatable = () => { 
+    var url = `${page.url}/show_table_data?department=${form.department}&employee_type=${form.employee_type}`;
     table.value = $("#employee-table").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `${page.url}/show_table_data`,
+        ajax: url,
         columns: [
             { data: "employee_name", title: "Name" },
             { data: "employee_no", title: "ID Number" },
@@ -111,41 +122,7 @@ const btnActionTerminateFunc = (id, status, action) => {
                         },
                     });
     }
-    // swal(`Are you sure you want to ${status == 'N' ? 'terminate employee' : 'remove termination of employee'}?`, {
-    //         buttons: {
-    //             cancel: "Cancel",
-    //             catch: {
-    //                 text: "Yes",
-    //                 value: "catch",
-    //             },
-    //             // defeat: true,
-    //         },
-    //     }).then((value) => {
-    //         switch (value) {
-    //             case "catch":
-                    // router.visit(`${page?.url}/terminate/${id}/${status == 'N' ? 'Y' : 'N'}`, {
-                    //     method: 'post',
-                    //     onSuccess: () => {
-                    //         swal(
-                    //             "Success!",
-                    //             `Employee was ${status == 'N' ? 'terminated' : 'removed termination'} successfully.`,
-                    //             "success"
-                    //         ),
-                    //         reloadDatatableAjax();
-                    //     },
-                    //     onError: () => {
-                    //         notify(
-                    //                     "Error",
-                    //                     "Oops, something went wrong.",
-                    //                     "danger"
-                    //                 );
-                    //     },
-                    // });
-    //                 break;
-    //             default:
-    //                 swal.close();
-    //         }
-    //     });
+    
 }
 
 const btnActionFunc = (id, action) => {
@@ -198,6 +175,11 @@ const btnActionFunc = (id, action) => {
     }
 };
 
+const filterTableFunction = () => {
+    table.value.destroy();
+    reloadDatatable();
+}
+
 onMounted(() => {
     reloadDatatable();
 })
@@ -227,6 +209,54 @@ onMounted(() => {
                     <div class="col-12 p-2 text-end">
                         <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Employee</button>
                     </div>
+                    <div class="col-3 p-2">
+                        <select 
+                                                class="form-select" 
+                                                aria-label="Select Department"
+                                                v-model="form.department"
+                                                @change="filterTableFunction()"
+                                            >
+                                                <option value="">
+                                                    Select Department
+                                                </option>
+                                                <option 
+                                                    v-for="(
+                                                        d, i
+                                                    ) in designations"
+                                                    :key="d.id"
+                                                    :value="d.id"
+                                                    :selected="
+                                                        form.department ==
+                                                        d?.id
+                                                    "
+                                                >{{ d?.name }}</option>
+                                            </select>
+                    </div>
+                    <div class="col-3 p-2">
+                        <select 
+                                                class="form-select" 
+                                                aria-label="Select Employee Type"
+                                                v-model="form.employee_type"
+                                                @change="filterTableFunction()"
+                                            >
+                                                <option value="">
+                                                    Select Employee Type
+                                                </option>
+                                                <option
+                                                v-for="(
+                                                        d, i
+                                                    ) in employeeTypes"
+                                                    :key="d.id"
+                                                    :value="d.id"
+                                                    :selected="
+                                                        form.employee_type ==
+                                                        d?.id
+                                                    "
+                                                
+                                                >{{ d?.name }}</option>
+                                            </select>
+                    </div>
+                    <div class="col-6 p-2"></div>
                     <div class="col-12 p-2">
                         <div class="table-responsive">
                             <table

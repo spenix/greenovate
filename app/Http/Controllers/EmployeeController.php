@@ -42,9 +42,16 @@ class EmployeeController extends Controller
                 'workExperience',
                 'educationalAttainment'
             ])->join('employee_types', 'employee_types.id', 'employees.employee_type_id')
-                ->selectRaw("*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type")->get();
-            // dd($data);
-            return datatables::of($data)
+                ->selectRaw("employees.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type");
+            if ($request->department) {
+                $data->where('designation_id', $request->department);
+            }
+
+            if ($request->employee_type) {
+                $data->where('employee_type_id', $request->employee_type);
+            }
+
+            return datatables::of($data->get())
                 ->addIndexColumn()
                 ->make(true);
         }
