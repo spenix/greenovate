@@ -634,7 +634,7 @@ watch(props?.modalAttrs, (newValue) => {
                         <div class="card-body">
                             <h5 class="card-title">Employee Family Background</h5>
                             <div class="row">
-                                <div class="col-12 text-end pb-2"><button type="button" class="btn btn-primary btn-sm" @click="addNewFamilyBackgoundRow()">Add Family Background</button></div>
+                                <div class="col-12 text-end pb-2" v-if="modalAttrs?.action != 'VIEW'"><button type="button" class="btn btn-primary btn-sm" @click="addNewFamilyBackgoundRow()">Add Family Background</button></div>
                                 <div class="col-12 mt-1">
                                     <table class="table table-bordered table-sm display w-100" width="100%">
                                         <thead>
@@ -645,7 +645,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 <th scope="col" width="15%">Contact No.</th>
                                                 <th scope="col" width="15%">Birthday</th>
                                                 <th scope="col" width="15%">Occupation</th>
-                                                <th scope="col" width="5%">Action</th>
+                                                <th scope="col" width="5%" v-if="modalAttrs?.action != 'VIEW'">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -735,7 +735,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                     >
                                                     <ErrorMessage :message="form.errors[`familyBackgound.${i}.occupation`]?.replace(`familyBackgound.${i}.occupation`, 'occupation')"/>
                                                 </td>
-                                                <td class="text-center" width="5%">
+                                                <td class="text-center" width="5%" v-if="modalAttrs?.action != 'VIEW'">
                                                     <a 
                                                         href="javascript:;" 
                                                         class="delete-btn-option red" 
@@ -745,7 +745,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 </td>
                                             </tr>
                                             <tr v-else>
-                                                <td colspan="7" class="text-center">No Data Results.</td>
+                                                <td :colspan="modalAttrs?.action != 'VIEW' ? 7 : 6" class="text-center">No Data Results.</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -759,7 +759,7 @@ watch(props?.modalAttrs, (newValue) => {
                         <div class="card-body">
                             <h5 class="card-title">Employee Work Experience</h5>
                             <div class="row">
-                                <div class="col-12 text-end pb-2"><button type="button" class="btn btn-primary btn-sm" @click="addNewWorkExperienceRow()">Add Work Experience</button></div>
+                                <div class="col-12 text-end pb-2" v-if="modalAttrs?.action != 'VIEW'"><button type="button" class="btn btn-primary btn-sm" @click="addNewWorkExperienceRow()">Add Work Experience</button></div>
                                 <div class="col-12 mt-1">
                                     <table class="table table-bordered table-sm display w-100" width="100%">
                                         <thead>
@@ -768,7 +768,7 @@ watch(props?.modalAttrs, (newValue) => {
                                             <th scope="col" width="20%">Position</th>
                                             <th scope="col" width="20%">Date From</th>
                                             <th scope="col" width="20%">Date To</th>
-                                            <th scope="col" width="5%">Action</th>
+                                            <th scope="col" width="5%" v-if="modalAttrs?.action != 'VIEW'">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -825,7 +825,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                     >
                                                     <ErrorMessage :message="form.errors[`workExperience.${i}.date_to`]?.replace(`workExperience.${i}.date_to`, 'date to')"/>
                                             </td>
-                                            <td class="text-center" width="5%">
+                                            <td class="text-center" width="5%" v-if="modalAttrs?.action != 'VIEW'">
                                                     <a 
                                                         href="javascript:;" 
                                                         class="delete-btn-option red" 
@@ -835,7 +835,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 </td>
                                         </tr>
                                         <tr v-else>
-                                                <td colspan="5" class="text-center">No Data Results.</td>
+                                                <td :colspan="modalAttrs?.action != 'VIEW' ? 5 : 4" class="text-center">No Data Results.</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -849,7 +849,7 @@ watch(props?.modalAttrs, (newValue) => {
                         <div class="card-body">
                             <h5 class="card-title">Employee Educational Attainment</h5>
                             <div class="row">
-                                <div class="col-12 text-end pb-2"><button type="button" class="btn btn-primary btn-sm" @click="addNewEducationalAttainmentRow()">Add Educational Attainment</button></div>
+                                <div class="col-12 text-end pb-2" v-if="modalAttrs?.action != 'VIEW'"><button type="button" class="btn btn-primary btn-sm" @click="addNewEducationalAttainmentRow()">Add Educational Attainment</button></div>
                                 <div class="col-12 mt-1">
                                     <table class="table table-bordered table-sm display w-100" width="100%">
                                         <thead>
@@ -859,7 +859,7 @@ watch(props?.modalAttrs, (newValue) => {
                                             <th scope="col" width="20%">School Level</th>
                                             <th scope="col" width="10%">Year From</th>
                                             <th scope="col" width="10%">Year To</th>
-                                            <th scope="col" width="5%">Action</th>
+                                            <th scope="col" width="5%" v-if="modalAttrs?.action != 'VIEW'">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -966,7 +966,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                     </select>
                                                     <ErrorMessage :message="form.errors[`educationalAttainment.${i}.year_to`]?.replace(`educationalAttainment.${i}.year_to`, 'year to')"/>
                                             </td>
-                                            <td class="text-center" width="5%">
+                                            <td class="text-center" width="5%" v-if="modalAttrs?.action != 'VIEW'">
                                                     <a 
                                                         href="javascript:;" 
                                                         class="delete-btn-option red" 
@@ -976,7 +976,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 </td>
                                         </tr>
                                         <tr v-else>
-                                                <td colspan="6" class="text-center">No Data Results.</td>
+                                                <td :colspan="modalAttrs?.action != 'VIEW' ? 6 : 5" class="text-center">No Data Results.</td>
                                             </tr>
                                         </tbody>
                                     </table>
