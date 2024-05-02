@@ -166,8 +166,15 @@ class PerformanceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Performance $performance)
+    public function destroy(Performance $performance, $id)
     {
-        //
+        try {
+            $performance::find($id)->delete();
+            return Redirect::route('performance');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'errorMessage' => $e->getMessage(),
+            ]);
+        }
     }
 }
