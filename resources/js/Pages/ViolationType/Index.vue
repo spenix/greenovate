@@ -14,6 +14,13 @@ const modalAttrs = ref({
     title: "VIOLATION TYPE",
     action: "",
 });
+
+const props = defineProps({
+    systemSetup: {
+        type: Object,
+    },
+});
+
 const reloadDatatableAjax = () => {
     modalAttrs.value.action = "";
     table.value.ajax.reload();
