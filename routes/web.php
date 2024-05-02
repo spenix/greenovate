@@ -70,14 +70,14 @@ Route::middleware('auth')->group(function () {
     Route::post('employee-attendance/store', [AttendanceController::class, 'store'])->name('employee-attendance.store');
     Route::post('upload-attendance', [AttendanceController::class, 'upload_attendance'])->name('upload-attendance');
     Route::put('employee-attendance/update/{id}', [AttendanceController::class, 'update'])->name('employee-attendance.update');
-    Route::delete('employee-attendance/{role}', [AttendanceController::class, 'destroy'])->name('employee-attendance.destroy');
+    Route::delete('employee-attendance/destroy/{id}', [AttendanceController::class, 'destroy'])->name('employee-attendance.destroy');
 
     Route::get('employee-leaves', [EmployeeLeaveController::class, 'index'])->name('employee-leaves');
     Route::get('employee-leaves/show/{id}', [EmployeeLeaveController::class, 'show']);
     Route::get('employee-leaves/show_table_data', [EmployeeLeaveController::class, 'show_table_data']);
     Route::post('employee-leaves/store', [EmployeeLeaveController::class, 'store'])->name('employee-leaves.store');
     Route::put('employee-leaves/update/{id}', [EmployeeLeaveController::class, 'update'])->name('employee-leaves.update');
-    Route::delete('employee-leaves/{role}', [EmployeeLeaveController::class, 'destroy'])->name('employee-leaves.destroy');
+    Route::delete('employee-leaves/destroy/{id}', [EmployeeLeaveController::class, 'destroy'])->name('employee-leaves.destroy');
 
     Route::get('leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
     Route::get('leave-types/show/{id}', [LeaveTypeController::class, 'show']);
@@ -92,6 +92,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('leave-credits/{role}', [LeaveCreditController::class, 'destroy'])->name('leave-credits.destroy');
 
     Route::get('payroll', [PayrollController::class, 'index'])->name('payroll');
+    Route::get('payroll/show/{id}', [PayrollController::class, 'show']);
+    Route::get('payroll/show_table_data', [PayrollController::class, 'show_table_data']);
     Route::post('payroll/store', [PayrollController::class, 'store'])->name('payroll.store');
     Route::put('payroll/update/{id}', [PayrollController::class, 'update'])->name('payroll.update');
     Route::delete('payroll/{role}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
