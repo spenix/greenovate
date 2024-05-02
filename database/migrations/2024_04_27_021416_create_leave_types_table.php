@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('leave_entitlement_id');
             $table->timestamps();
             $table->foreign('leave_entitlement_id')->references('id')->on('leave_entitlements');
+            $table->softDeletes();
         });
     }
 

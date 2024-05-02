@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('philhealth', 100)->nullable();
             $table->decimal('rate', 10, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('blood_type_id')->references('id')->on('blood_types');
             $table->foreign('employee_type_id')->references('id')->on('employee_types');
             $table->foreign('designation_id')->references('id')->on('designations');

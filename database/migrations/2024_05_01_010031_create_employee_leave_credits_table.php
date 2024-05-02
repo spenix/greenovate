@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('leave_credit', 8, 2)->default(0);
             $table->year('year_applicable');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('employee_id')->references('id')->on('employees');
         });
     }

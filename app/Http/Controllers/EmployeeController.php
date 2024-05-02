@@ -336,11 +336,7 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee, $id)
     {
         try {
-            $employee::with([
-                'familyBackground',
-                'workExperience',
-                'educationalAttainment'
-            ])->find($id)->delete();
+            $employee::find($id)->delete();
             return Redirect::route('employees');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([

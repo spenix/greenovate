@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('violation_category_id');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('violation_category_id')->references('id')->on('violation_categories');
         });
     }

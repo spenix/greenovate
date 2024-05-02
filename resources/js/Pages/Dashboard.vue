@@ -8,6 +8,7 @@ const page = usePage()
 const totalEmployee = ref(page.props.totalEmployee);
 const regularEmployee = ref(page.props.regularEmployee);
 const terminatedEmployee = ref(page.props.terminatedEmployee);
+const onCallEmployee = ref(page.props.onCallEmployee);
 
 defineProps({
     systemSetup: {
@@ -98,7 +99,7 @@ defineProps({
                                 <i class="ri-cellphone-line"></i>
                                 </div>
                                 <div class="ps-3">
-                                <h6>30</h6>
+                                <h6>{{ onCallEmployee }}</h6>
                                 </div>
                             </div>
                             </div>

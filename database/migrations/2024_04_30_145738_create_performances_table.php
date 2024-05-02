@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('date_committed');
             $table->text('remark');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('violation_type_id')->references('id')->on('violation_types');
             $table->foreign('employee_id')->references('id')->on('employees');
         });

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('leave_credit', 8, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

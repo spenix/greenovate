@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date_end');
             $table->decimal('leave_days', 8, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->foreign('leave_type_id')->references('id')->on('leave_types');
             $table->foreign('leave_entitlement_id')->references('id')->on('leave_entitlements');

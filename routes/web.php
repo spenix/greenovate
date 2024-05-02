@@ -43,7 +43,8 @@ Route::get('/dashboard', function () {
         ],
         'totalEmployee' =>  Employee::get()->count(),
         'terminatedEmployee' =>  Employee::where('terminate', 'Y')->get()->count(),
-        'regularEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 1)->count()
+        'regularEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 1)->count(),
+        'onCallEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 2)->count(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
