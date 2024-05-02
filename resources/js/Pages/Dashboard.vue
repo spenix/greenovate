@@ -9,6 +9,7 @@ const totalEmployee = ref(page.props.totalEmployee);
 const regularEmployee = ref(page.props.regularEmployee);
 const terminatedEmployee = ref(page.props.terminatedEmployee);
 const onCallEmployee = ref(page.props.onCallEmployee);
+const onLeaveEmployee = ref(page.props.onLeaveEmployee);
 
 defineProps({
     systemSetup: {
@@ -117,7 +118,7 @@ defineProps({
                                 <i class="bi bi-envelope"></i>
                                 </div>
                                 <div class="ps-3">
-                                <h6>10</h6>
+                                <h6>{{ onLeaveEmployee }}</h6>
                                 </div>
                             </div>
                             </div>
