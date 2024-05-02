@@ -48,6 +48,8 @@ const reloadDatatable = () => {
             { 
                 data: "attachment_path", 
                 title: "DTR",
+                orderable: false,
+                searchable: false,
                 render(h) {
                     return `<a href="${h}" target="_blank">Download</a>`;
                 },  

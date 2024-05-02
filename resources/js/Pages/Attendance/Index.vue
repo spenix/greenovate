@@ -136,6 +136,7 @@ const btnActionFunc = (id, action) => {
         modalUploadAttrs.value.dataId = id;
         modalUploadAttrs.value.title = `${action} FILE`;
         modalUploadAttrs.value.action = action;
+        modalDTRAttrs.value.action = "";
         $(
             `#${
                 modalUploadAttrs.value?.modalId

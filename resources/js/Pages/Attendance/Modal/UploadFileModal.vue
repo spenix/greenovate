@@ -50,7 +50,7 @@ const resetFormData = () => {
     resetFormAction();
     notify(
         "Success",
-        `Shift was ${
+        `DTR file was ${
             props?.modalUploadAttrs?.action == "EDIT" ? "updated" : "saved"
         } successfully.`,
         "success"
