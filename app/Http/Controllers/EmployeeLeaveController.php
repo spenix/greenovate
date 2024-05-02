@@ -126,9 +126,9 @@ class EmployeeLeaveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(EmployeeLeave $employeeLeave)
+    public function show(EmployeeLeave $employeeLeave, $id)
     {
-        $data = EmployeeLeave::join('employees', 'employees.id', 'employee_leaves.employee_id')
+        $data = $employeeLeave::join('employees', 'employees.id', 'employee_leaves.employee_id')
             ->join('leave_types', 'leave_types.id', 'employee_leaves.leave_type_id')
             ->join('leave_entitlements', 'leave_entitlements.id', 'leave_types.leave_entitlement_id')
             ->selectRaw("
@@ -137,7 +137,7 @@ class EmployeeLeaveController extends Controller
             leave_entitlements.name leave_entitlement,
             employees.employee_no,
             CONCAT(employees.firstname, ' ', employees.lastname) as employee_name
-        ");
+        ")->find($id);
 
         return response()->json($data);
     }
@@ -153,9 +153,61 @@ class EmployeeLeaveController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployeeLeaveRequest $request, EmployeeLeave $employeeLeave)
+    public function update(UpdateEmployeeLeaveRequest $request, $id)
     {
-        //
+        try {
+            $EmpLeaveCredit = EmployeeLeaveCredit::where(['year_applicable' => date('Y'), "employee_id" => $request->employee_name])->first();
+            $leaveHistory = EmployeeLeave::find($id);
+            $resetBalance = $EmpLeaveCredit->leave_credit +  $leaveHistory->leave_days;
+
+            $payload = [
+                "employee_id" => $request->employee_name,
+                "leave_type_id" => $request->leave_type,
+                "leave_entitlement_id" => $request->leave_entitlement_id,
+                "date_start" => $request->date_start,
+                "date_end" => $request->date_end,
+                "leave_days" => $request->leave_days,
+                "running_balance" => $resetBalance - $request->leave_days,
+            ];
+            //code...
+            // check Leave Credit Balance
+            if (date('Y', strtotime($request->date_start)) != $EmpLeaveCredit->year_applicable) {
+                return back()->withErrors([
+                    'errorMessage' => 'Oops, employee leave credit is not set for the year ' . date('Y', strtotime($request->date_start)),
+                ]);
+            }
+
+            if ($request->leave_days > $resetBalance) {
+                return back()->withErrors([
+                    'leave_days' => 'Oops, employee available balance is only ' . $resetBalance . ' ' . ($resetBalance > 1 ? 'days.' : 'day.'),
+                ])->onlyInput('leave_days');
+            }
+            $isExist = EmployeeLeave::where('id', '!=', $id)->where($payload)->count();
+            if ($isExist) {
+                return back()->withErrors([
+                    'errorMessage' => 'The employee leave form was already exists.',
+                ]);
+            }
+
+            if ($request->date_start > $request->date_end) {
+                return back()->withErrors([
+                    'errorMessage' => 'Invalid date inputs, please check and try again.',
+                ]);
+            }
+            $data = EmployeeLeave::find($id)->update($payload);
+            if ($data) {
+                EmployeeLeaveCredit::where([
+                    'year_applicable' => date('Y'),
+                    "employee_id" => $payload['employee_id']
+                ])->update(['leave_credit' => $payload['running_balance']]);
+            }
+
+            return Redirect::route('employee-leaves');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'errorMessage' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

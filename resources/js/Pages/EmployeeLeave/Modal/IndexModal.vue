@@ -99,10 +99,15 @@ watch(props?.modalAttrs, (newValue) => {
     if (newValue?.action != "ADD") {
         http.get(`${page?.url}/show/${newValue?.dataId}`).then(
             ({ data, status }) => {
-                emp_id_select.value[0].selectize.setValue(data.employee_id);
-                form.id = data?.id;
-                form.leave_type = data?.name;
-                form.leave_entitlement = data?.leave_entitlement_id;
+                emp_id_select.value[0].selectize.setValue(data.employee_id)
+                form.id = data.id
+                form.employee_name = data.employee_id
+                form.leave_type = data.leave_type_id
+                form.leave_entitlement_id = data.leave_entitlement_id
+                form.leave_entitlement = data.leave_entitlement
+                form.date_start = data.date_start
+                form.date_end = data.date_end
+                form.leave_days = data.leave_days
             }
         );
     }
@@ -140,7 +145,7 @@ const getSelectedEmp = (selectedVal) => {
        return d.id == selectedVal
     });
 
-    form.employee_name = emp.id;
+    form.employee_name = emp?.id;
 };
 onMounted(() => {
     emp_id_select.value = $("#select_employee_id").selectize({

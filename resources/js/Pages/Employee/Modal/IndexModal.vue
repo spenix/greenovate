@@ -976,7 +976,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 </td>
                                         </tr>
                                         <tr v-else>
-                                                <td colspan="5" class="text-center">No Data Results.</td>
+                                                <td colspan="6" class="text-center">No Data Results.</td>
                                             </tr>
                                         </tbody>
                                     </table>
