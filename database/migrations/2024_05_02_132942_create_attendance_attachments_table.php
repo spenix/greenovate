@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('attendance_attachments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('attendance_id');
+            $table->text('attachment_path');
+            $table->date('period_start');
+            $table->date('period_end');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('attendance_id')->references('id')->on('attendances');
         });
     }
 
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('attendance_attachments');
     }
 };

@@ -162,7 +162,7 @@ onMounted(() => {
                 <h5 class="card-title">Employee Leave Credit List</h5>
                 <div class="row">
                     <div class="col-12 p-2 text-end">
-                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Employee</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Employee Leave</button>
                     </div>
                     <div class="col-12 p-2">
                         <div class="table-responsive">

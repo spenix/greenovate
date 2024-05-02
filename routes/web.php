@@ -64,7 +64,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('employees/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
     Route::get('employee-attendance', [AttendanceController::class, 'index'])->name('employee-attendance');
+    Route::get('employee-attendance/show/{id}', [AttendanceController::class, 'show']);
+    Route::get('employee-attendance/show_table_data', [AttendanceController::class, 'show_table_data']);
+    Route::get('employee-attendance/show_dtr_table_data', [AttendanceController::class, 'show_dtr_table_data']);
     Route::post('employee-attendance/store', [AttendanceController::class, 'store'])->name('employee-attendance.store');
+    Route::post('upload-attendance', [AttendanceController::class, 'upload_attendance'])->name('upload-attendance');
     Route::put('employee-attendance/update/{id}', [AttendanceController::class, 'update'])->name('employee-attendance.update');
     Route::delete('employee-attendance/{role}', [AttendanceController::class, 'destroy'])->name('employee-attendance.destroy');
 
