@@ -15,13 +15,10 @@ class ViolationCategorySeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Drunk Working'
+                'name' => 'MAJOR'
             ],
             [
-                'name' => 'Stealing Materials'
-            ],
-            [
-                'name' => 'Fighting while Working'
+                'name' => 'MINOR'
             ],
         ];
 
