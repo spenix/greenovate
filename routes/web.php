@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     ViolationTypeController
 };
 use App\Models\Attendance;
+use App\Models\AttendanceAttachment;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use Illuminate\Support\Facades\Route;
@@ -48,7 +49,12 @@ Route::get('/dashboard', function () {
         'regularEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 1)->count(),
         'onCallEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 2)->count(),
         'onLeaveEmployee' =>  EmployeeLeave::whereDate('date_start', '>=', now())->whereDate('date_end', '<=', now())->count(),
-        'attendanceCount' =>  Attendance::get()->count(),
+        'attendanceCount' =>  AttendanceAttachment::join('attendances', 'attendances.id', 'attendance_attachments.attendance_id')
+            ->whereDate('period_start', '>=', date('Y-m-1'))
+            ->whereDate('period_end', '<=', date('Y-m-t'))
+            ->where('attendances.deleted_at', null)
+            ->get()
+            ->count(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

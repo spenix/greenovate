@@ -21,7 +21,9 @@ class PerformanceController extends Controller
     {
         $data = Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')
             ->join('designations', 'designations.id', 'employees.designation_id')
-            ->selectRaw("employees.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type, designations.name designation")->get();
+            ->selectRaw("employees.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type, designations.name designation")
+            ->where('terminate', 'N')
+            ->get();
         return Inertia::render('Performance/Index', [
             'systemSetup' => [
                 'nameShort' => config('app.name_short', 'Laravel'),

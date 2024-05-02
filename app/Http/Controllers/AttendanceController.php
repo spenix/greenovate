@@ -27,7 +27,7 @@ class AttendanceController extends Controller
                 CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, 
                 employee_types.name as employee_type, 
                 designations.name designation
-            ")->get();
+            ")->where('terminate', 'N')->get();
         return Inertia::render('Attendance/Index', [
             'systemSetup' => [
                 'nameShort' => config('app.name_short', 'Laravel'),

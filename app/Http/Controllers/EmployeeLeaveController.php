@@ -23,7 +23,9 @@ class EmployeeLeaveController extends Controller
     {
         $data = Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')
             ->join('designations', 'designations.id', 'employees.designation_id')
-            ->selectRaw("employees.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type, designations.name designation")->get();
+            ->selectRaw("employees.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_types.name as employee_type, designations.name designation")
+            ->where('terminate', 'N')
+            ->get();
         $leaveTypes = LeaveType::join('leave_entitlements', 'leave_entitlements.id', 'leave_types.leave_entitlement_id')
             ->selectRaw("leave_types.*, leave_entitlements.name leave_entitlement, leave_entitlements.id leave_entitlement_id")
             ->get();
