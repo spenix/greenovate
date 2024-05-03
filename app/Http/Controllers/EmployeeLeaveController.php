@@ -75,46 +75,52 @@ class EmployeeLeaveController extends Controller
         try {
 
             $EmpLeaveCredit = EmployeeLeaveCredit::where(['year_applicable' => date('Y'), "employee_id" => $request->employee_name])->first();
-            $payload = [
-                "employee_id" => $request->employee_name,
-                "leave_type_id" => $request->leave_type,
-                "leave_entitlement_id" => $request->leave_entitlement_id,
-                "date_start" => $request->date_start,
-                "date_end" => $request->date_end,
-                "leave_days" => $request->leave_days,
-                "running_balance" => $EmpLeaveCredit->leave_credit - $request->leave_days,
-            ];
-            //code...
-            // check Leave Credit Balance
-            if (date('Y', strtotime($request->date_start)) != $EmpLeaveCredit->year_applicable) {
-                return back()->withErrors([
-                    'errorMessage' => 'Oops, employee leave credit is not set for the year ' . date('Y', strtotime($request->date_start)),
-                ]);
-            }
+            if ($EmpLeaveCredit) {
+                $payload = [
+                    "employee_id" => $request->employee_name,
+                    "leave_type_id" => $request->leave_type,
+                    "leave_entitlement_id" => $request->leave_entitlement_id,
+                    "date_start" => $request->date_start,
+                    "date_end" => $request->date_end,
+                    "leave_days" => $request->leave_days,
+                    "running_balance" => $EmpLeaveCredit->leave_credit - $request->leave_days,
+                ];
+                //code...
+                // check Leave Credit Balance
+                if (date('Y', strtotime($request->date_start)) != $EmpLeaveCredit->year_applicable) {
+                    return back()->withErrors([
+                        'errorMessage' => 'Oops, employee leave credit is not set for the year ' . date('Y', strtotime($request->date_start)),
+                    ]);
+                }
 
-            if ($request->leave_days > $EmpLeaveCredit->leave_credit) {
-                return back()->withErrors([
-                    'leave_days' => 'Oops, employee available balance is only ' . $EmpLeaveCredit->leave_credit . ' ' . ($EmpLeaveCredit->leave_credit > 1 ? 'days.' : 'day.'),
-                ])->onlyInput('leave_days');
-            }
-            $isExist = EmployeeLeave::where($payload)->count();
-            if ($isExist) {
-                return back()->withErrors([
-                    'errorMessage' => 'The employee leave form was already exists.',
-                ]);
-            }
+                if ($request->leave_days > $EmpLeaveCredit->leave_credit) {
+                    return back()->withErrors([
+                        'leave_days' => 'Oops, employee available balance is only ' . $EmpLeaveCredit->leave_credit . ' ' . ($EmpLeaveCredit->leave_credit > 1 ? 'days.' : 'day.'),
+                    ])->onlyInput('leave_days');
+                }
+                $isExist = EmployeeLeave::where($payload)->count();
+                if ($isExist) {
+                    return back()->withErrors([
+                        'errorMessage' => 'The employee leave form was already exists.',
+                    ]);
+                }
 
-            if ($request->date_start > $request->date_end) {
+                if ($request->date_start > $request->date_end) {
+                    return back()->withErrors([
+                        'errorMessage' => 'Invalid date inputs, please check and try again.',
+                    ]);
+                }
+                $data = EmployeeLeave::create($payload);
+                if ($data->id) {
+                    EmployeeLeaveCredit::where([
+                        'year_applicable' => date('Y'),
+                        "employee_id" => $data->employee_id
+                    ])->update(['leave_credit' => $data->running_balance]);
+                }
+            } else {
                 return back()->withErrors([
-                    'errorMessage' => 'Invalid date inputs, please check and try again.',
+                    'errorMessage' => 'Employee leave credit was not yet set, go to leave credit module first.',
                 ]);
-            }
-            $data = EmployeeLeave::create($payload);
-            if ($data->id) {
-                EmployeeLeaveCredit::where([
-                    'year_applicable' => date('Y'),
-                    "employee_id" => $data->employee_id
-                ])->update(['leave_credit' => $data->running_balance]);
             }
 
             return Redirect::route('employee-leaves');

@@ -23,6 +23,9 @@ class ShiftSeeder extends Seeder
             [
                 'name' => 'Night'
             ],
+            [
+                'name' => 'Morning/Afternoon'
+            ],
         ];
 
         Shift::insert($data);
