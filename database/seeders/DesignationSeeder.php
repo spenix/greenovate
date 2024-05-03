@@ -32,6 +32,9 @@ class DesignationSeeder extends Seeder
             [
                 'name' => 'Labor'
             ],
+            [
+                'name' => 'Security Guard'
+            ],
         ];
 
         Designation::insert($data);

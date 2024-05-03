@@ -111,7 +111,7 @@ const getSelectedEmp = (selectedVal) => {
     form.employee_type = emp?.employee_type;
     shifts.value = shifts.value.filter(d => {
       if (d.id == 3 ) {
-        if ((emp?.designation).toLowerCase() == 'security guard') {
+        if ((emp?.designation).toLowerCase() == 'security guard' ||  (emp?.employee_type).toLowerCase() != 'regular') {
           return d
         }
       } else {
