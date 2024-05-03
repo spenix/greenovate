@@ -109,7 +109,15 @@ const getSelectedEmp = (selectedVal) => {
     form.employee_name = emp?.employee_name;
     form.department = emp?.designation;
     form.employee_type = emp?.employee_type;
-    
+    shifts.value = shifts.value.filter(d => {
+      if (d.id == 3 ) {
+        if ((emp?.designation).toLowerCase() == 'security guard') {
+          return d
+        }
+      } else {
+        return d
+      }
+    })
 };
 onMounted(() => {
     emp_id_select.value = $("#select_employee_id").selectize({
