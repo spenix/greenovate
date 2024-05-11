@@ -69,10 +69,10 @@ console.log('user', user);
 
      <!-- Payroll -->
     <li class="nav-item">
-        <a class="nav-link" :class="['/payroll', '/payslip-report'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#payroll-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link" :class="['/payroll', '/payslip-report', '/compensations', '/deductions', '/basic-salary'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#payroll-nav" data-bs-toggle="collapse" href="#">
         <i class="ri-calculator-line"></i><span>Payroll</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="payroll-nav" class="nav-content collapse " :class="['/payroll', '/payslip-report'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <ul id="payroll-nav" class="nav-content collapse " :class="['/payroll', '/payslip-report', '/compensations', '/deductions', '/basic-salary'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
         <li>
             <Link :href="route('payroll')" class="nav-link" :class="page?.url == '/payroll' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Payroll List</span>
@@ -84,17 +84,17 @@ console.log('user', user);
             </Link>
         </li>
         <li>
-            <Link :href="route('compensations')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+            <Link :href="route('compensations')" class="nav-link" :class="page?.url == '/compensations' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Compensations</span>
             </Link>
         </li>
         <li>
-            <Link :href="route('deductions')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+            <Link :href="route('deductions')" class="nav-link" :class="page?.url == '/deductions' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Deductions</span>
             </Link>
         </li>
         <li>
-            <Link :href="route('basic-salary')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+            <Link :href="route('basic-salary')" class="nav-link" :class="page?.url == '/basic-salary' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Basic Salary</span>
             </Link>
         </li>
