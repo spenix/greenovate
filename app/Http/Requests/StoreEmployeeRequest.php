@@ -38,6 +38,7 @@ class StoreEmployeeRequest extends FormRequest
             'gender' => 'required|in:M,F',
             'blood_type' => 'nullable|integer|exists:blood_types,id',
             'birthdate' => 'required|date',
+            'civil_status' => 'required|in:S,M,W,D',
             'employee_id' => 'required|string',
             'contact_no' => 'required|string',
             'email' => 'required|email|unique:employees,email',

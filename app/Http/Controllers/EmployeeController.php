@@ -31,7 +31,13 @@ class EmployeeController extends Controller
             'educationalLevels' => EducationalLevel::where('status', 'Y')->get(),
             'basicSalaries' => EmpBasicSalary::where('status', 'Y')->selectRaw('designation_id, basic_salary')->get(),
             'years' => range(1970, date('Y')),
-            'current_year' => date('Y')
+            'current_year' => date('Y'),
+            'civilStatuses' => [
+                ['code' => 'S', 'name' => 'Single'], 
+                ['code' => 'M', 'name' => 'Married'], 
+                ['code' => 'W', 'name' => 'Widowed'], 
+                ['code' => 'D', 'name' => 'Divorced']
+            ]
         ]);
     }
 
@@ -81,6 +87,7 @@ class EmployeeController extends Controller
                 'suffix' => $request->suffix,
                 'blood_type_id' => $request->blood_type,
                 'birthdate' => $request->birthdate,
+                'civil_status' => $request->civil_status,
                 'employee_no' => $request->employee_id,
                 'contact_no' => $request->contact_no,
                 'email' => $request->email,
@@ -215,6 +222,7 @@ class EmployeeController extends Controller
                 'suffix' => $request->suffix,
                 'blood_type_id' => $request->blood_type,
                 'birthdate' => $request->birthdate,
+                'civil_status' => $request->civil_status,
                 'employee_no' => $request->employee_id,
                 'contact_no' => $request->contact_no,
                 'email' => $request->email,

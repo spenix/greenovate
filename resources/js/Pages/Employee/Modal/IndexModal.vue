@@ -17,6 +17,7 @@ const departments = ref(page.props.departments);
 const designations = ref(page.props.designations);
 const relationshipTypes = ref(page.props.relationshipTypes);
 const educationalLevels = ref(page.props.educationalLevels);
+const civilStatuses = ref(page.props.civilStatuses);
 const years = ref(page.props.years);
 
 
@@ -29,6 +30,7 @@ const form = useForm({
     gender: "",
     blood_type: "",
     birthdate: "",
+    civil_status: "",
     age: "",
     employee_id: "",
     contact_no: "",
@@ -241,11 +243,13 @@ watch(props?.modalAttrs, (newValue) => {
                 form.gender = data.gender;
                 form.blood_type = data.blood_type_id;
                 form.birthdate = data.birthdate;
+                form.civil_status = data.civil_status;
                 form.employee_id = data.employee_no;
                 form.contact_no = data.contact_no;
                 form.email = data.email;
                 form.employee_type = data.employee_type_id;
-                form.department = data.designation_id;
+                form.department = data.department_id;
+                form.position = data.designation_id;
                 form.date_hired = data.date_hired;
                 form.sss = data.sss;
                 form.tin = data.tin;
@@ -585,6 +589,35 @@ watch(props?.modalAttrs, (newValue) => {
                                     </div>
                                 </div>
                                 <div class="col-4 mt-1">
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-5 col-form-label">Civil Status:</label>
+                                        <div class="col-sm-7">
+                                            <select 
+                                                class="form-select" 
+                                                aria-label="Select Civil Status"
+                                                :class="form.errors.civil_status ? 'error-field' : ''"
+                                                v-model="form.civil_status"
+                                                @change="getBasicSalary($event)"
+                                                :disabled="modalAttrs?.action == 'VIEW'"
+                                            >
+                                                <option value="" hidden>
+                                                    Select Civil Status
+                                                </option>
+                                                <option 
+                                                    v-for="(
+                                                        d, i
+                                                    ) in civilStatuses"
+                                                    :key="d.code"
+                                                    :value="d.code"
+                                                    :selected="
+                                                        form.civil_status ==
+                                                        d?.code
+                                                    "
+                                                >{{ d?.name }}</option>
+                                            </select>
+                                            <ErrorMessage :message="form.errors.civil_status"/>
+                                        </div>
+                                    </div>
                                     <div class="row mb-3">
                                         <label for="inputText" class="col-sm-5 col-form-label">Date Hired:</label>
                                         <div class="col-sm-7">
