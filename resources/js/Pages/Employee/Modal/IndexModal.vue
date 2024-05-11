@@ -10,8 +10,10 @@ const { isNumber, converToCurrencyFormat } = commonFuntions();
 const emit = defineEmits(["reloadPageData"]);
 const page = usePage()
 
+const basicSalaries = ref(page.props.basicSalaries);
 const bloodTypes = ref(page.props.bloodTypes);
 const employeeTypes = ref(page.props.employeeTypes);
+const departments = ref(page.props.departments);
 const designations = ref(page.props.designations);
 const relationshipTypes = ref(page.props.relationshipTypes);
 const educationalLevels = ref(page.props.educationalLevels);
@@ -27,11 +29,13 @@ const form = useForm({
     gender: "",
     blood_type: "",
     birthdate: "",
+    age: "",
     employee_id: "",
     contact_no: "",
     email: "",
     employee_type: "",
     department: "",
+    position: "",
     date_hired: "",
     sss: "",
     tin: "",
@@ -207,6 +211,23 @@ const converToCurrency = (evt) => {
             }
     form.rate = val
 }
+const computeEmpAge = (evt) => {
+    form.age =  moment().diff(evt.target.value, 'years')
+}
+
+const getPositionBasedOnDepartment = (evt) => {
+    designations.value = page.props?.designations.filter(d => {
+        return d.department_id == evt.target.value
+    })
+}
+
+const getBasicSalary = (evt) => {
+    var result = page.props?.basicSalaries.find(d => {
+        return d.designation_id == evt.target.value
+    })
+    console.log('result', result)
+    form.rate = converToCurrencyFormat(result.basic_salary);
+}
 
 watch(props?.modalAttrs, (newValue) => {
     resetFormAction();
@@ -379,8 +400,40 @@ watch(props?.modalAttrs, (newValue) => {
                                             <ErrorMessage :message="form.errors.email"/>
                                         </div>
                                     </div>
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-5 col-form-label">Date of Birth:</label>
+                                        <div class="col-sm-7">
+                                            <input 
+                                                type="date" 
+                                                class="form-control" 
+                                                placeholder="Date of Birth" 
+                                                autocomplete="off"
+                                                @change="computeEmpAge($event)"
+                                                :class="form.errors.birthdate ? 'error-field' : ''"
+                                                v-model="form.birthdate"
+                                                :disabled="modalAttrs?.action == 'VIEW'"
+                                            >
+                                            <ErrorMessage :message="form.errors.birthdate"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-4 mt-1">
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-5 col-form-label">Age:</label>
+                                        <div class="col-sm-7">
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                placeholder="Age" 
+                                                autocomplete="off"
+                                                :class="form.errors.age ? 'error-field' : ''"
+                                                v-model="form.age"
+                                                readonly
+                                                :disabled="modalAttrs?.action == 'VIEW'"
+                                            >
+                                            <ErrorMessage :message="form.errors.age"/>
+                                        </div>
+                                    </div>
                                     <div class="row mb-3">
                                         <label for="inputText" class="col-sm-5 col-form-label">Gender:</label>
                                         <div class="col-sm-7">
@@ -428,21 +481,7 @@ watch(props?.modalAttrs, (newValue) => {
                                             <ErrorMessage :message="form.errors.blood_type"/>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
-                                        <label for="inputText" class="col-sm-5 col-form-label">Date of Birth:</label>
-                                        <div class="col-sm-7">
-                                            <input 
-                                                type="date" 
-                                                class="form-control" 
-                                                placeholder="Date of Birth" 
-                                                autocomplete="off"
-                                                :class="form.errors.birthdate ? 'error-field' : ''"
-                                                v-model="form.birthdate"
-                                                :disabled="modalAttrs?.action == 'VIEW'"
-                                            >
-                                            <ErrorMessage :message="form.errors.birthdate"/>
-                                        </div>
-                                    </div>
+                                  
                                     <div class="row mb-3">
                                         <label for="inputText" class="col-sm-5 col-form-label">Employee ID:</label>
                                         <div class="col-sm-7">
@@ -495,6 +534,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 aria-label="Select Department"
                                                 :class="form.errors.department ? 'error-field' : ''"
                                                 v-model="form.department"
+                                                @change="getPositionBasedOnDepartment($event)"
                                                 :disabled="modalAttrs?.action == 'VIEW'"
                                             >
                                                 <option value="" hidden>
@@ -503,7 +543,7 @@ watch(props?.modalAttrs, (newValue) => {
                                                 <option 
                                                     v-for="(
                                                         d, i
-                                                    ) in designations"
+                                                    ) in departments"
                                                     :key="d.id"
                                                     :value="d.id"
                                                     :selected="
@@ -515,7 +555,35 @@ watch(props?.modalAttrs, (newValue) => {
                                             <ErrorMessage :message="form.errors.department"/>
                                         </div>
                                     </div>
-                                
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-5 col-form-label">Position:</label>
+                                        <div class="col-sm-7">
+                                            <select 
+                                                class="form-select" 
+                                                aria-label="Select Position"
+                                                :class="form.errors.position ? 'error-field' : ''"
+                                                v-model="form.position"
+                                                @change="getBasicSalary($event)"
+                                                :disabled="modalAttrs?.action == 'VIEW'"
+                                            >
+                                                <option value="" hidden>
+                                                    Select Position
+                                                </option>
+                                                <option 
+                                                    v-for="(
+                                                        d, i
+                                                    ) in designations"
+                                                    :key="d.id"
+                                                    :value="d.id"
+                                                    :selected="
+                                                        form.position ==
+                                                        d?.id
+                                                    "
+                                                >{{ d?.name }}</option>
+                                            </select>
+                                            <ErrorMessage :message="form.errors.position"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-4 mt-1">
                                     <div class="row mb-3">
@@ -534,7 +602,7 @@ watch(props?.modalAttrs, (newValue) => {
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="inputText" class="col-sm-5 col-form-label">Rate:</label>
+                                        <label for="inputText" class="col-sm-5 col-form-label">Salary Rate:</label>
                                         <div class="col-sm-7">
                                             <input 
                                                 type="text" 
@@ -545,10 +613,11 @@ watch(props?.modalAttrs, (newValue) => {
                                                         $event
                                                     )
                                                 "
-                                                placeholder="Rate" 
+                                                placeholder="Salary Rate" 
                                                 autocomplete="off"
                                                 :class="form.errors.rate ? 'error-field' : ''"
                                                 v-model="form.rate"
+                                                readonly
                                                 :disabled="modalAttrs?.action == 'VIEW'"
                                             >
                                             <ErrorMessage :message="form.errors.rate"/>

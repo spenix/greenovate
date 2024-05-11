@@ -10,28 +10,34 @@ console.log('user', user);
     <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
-
+    <!-- Dashboard -->
     <li class="nav-item">
         <Link :href="route('dashboard')" class="nav-link" :class="page?.url != '/dashboard' ? 'collapsed' : ''">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </Link>
-    </li><!-- End Dashboard Nav -->
+    </li>
+     <!-- End Dashboard -->
 
+     <!-- Employees -->
     <li class="nav-item">
         <Link :href="route('employees')" class="nav-link" :class="page?.url != '/employees' ? 'collapsed' : ''">
             <i class="ri-user-settings-line"></i>
             <span>Employees</span>
         </Link>
-    </li><!-- End Dashboard Nav -->
+    </li>
+    <!-- End Employees -->
 
+    <!-- Attendance -->
     <li class="nav-item">
         <Link :href="route('employee-attendance')" class="nav-link" :class="page?.url != '/employee-attendance' ? 'collapsed' : ''">
             <i class="ri-calendar-check-line"></i>
             <span>Attendance</span>
         </Link>
-    </li><!-- End Dashboard Nav -->
+    </li>
+    <!-- End Attendance -->
 
+    <!-- Leave -->
     <li class="nav-item">
         <a class="nav-link" :class="['/employee-leaves', '/leave-types', '/leave-credits'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#leave-nav" data-bs-toggle="collapse" href="#">
         <i class="ri-sailboat-line"></i><span>Leave</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -58,8 +64,10 @@ console.log('user', user);
             </a>
         </li> -->
         </ul>
-    </li><!-- End Components Nav -->
+    </li>
+     <!-- End Leave -->
 
+     <!-- Payroll -->
     <li class="nav-item">
         <a class="nav-link" :class="['/payroll', '/payslip-report'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#payroll-nav" data-bs-toggle="collapse" href="#">
         <i class="ri-calculator-line"></i><span>Payroll</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -75,14 +83,31 @@ console.log('user', user);
                 <i class="bi bi-circle"></i><span>Payslip Report</span>
             </Link>
         </li>
+        <li>
+            <Link :href="route('compensations')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Compensations</span>
+            </Link>
+        </li>
+        <li>
+            <Link :href="route('deductions')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Deductions</span>
+            </Link>
+        </li>
+        <li>
+            <Link :href="route('basic-salary')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Basic Salary</span>
+            </Link>
+        </li>
         <!-- <li>
             <a href="components-accordion.html">
             <i class="bi bi-circle"></i><span>Terminated</span>
             </a>
         </li> -->
         </ul>
-    </li><!-- End Components Nav -->
+    </li>
+    <!-- End Payroll -->
 
+    <!-- Performance Monitoring -->
     <li class="nav-item">
         <a class="nav-link " :class="['/performance', '/violation-types'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#performance-monitoring-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-menu-button-wide"></i><span>Performance Monitoring</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -104,7 +129,33 @@ console.log('user', user);
             </a>
         </li> -->
         </ul>
-    </li><!-- End Components Nav -->
+    </li>
+    <!-- End Performance Monitoring -->
+
+    <!-- Code Library -->
+    <li class="nav-item">
+        <a class="nav-link " :class="['/departments', '/designations'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#code-library-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-gear"></i><span>Code Library</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="code-library-nav" class="nav-content collapse " :class="['/departments', '/designations'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <li>
+            <Link :href="route('departments')" class="nav-link" :class="page?.url == '/departments' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Departments</span>
+            </Link>
+        </li>
+        <li>
+            <Link :href="route('positions')" class="nav-link" :class="page?.url == '/positions' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Positions</span>
+            </Link>
+        </li>
+        <!-- <li>
+            <a href="components-accordion.html">
+            <i class="bi bi-circle"></i><span>Terminated</span>
+            </a>
+        </li> -->
+        </ul>
+    </li>
+    <!-- End Performance Monitoring -->
     </ul>
   </aside><!-- End Sidebar-->
 </template>

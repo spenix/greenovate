@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('birthdate')->nullable();
             $table->string('employee_no', 100)->nullable();
             $table->unsignedBigInteger('employee_type_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('department_id')->unsigned()->nullable();
             $table->unsignedBigInteger('designation_id')->unsigned()->nullable();
             $table->date('date_hired')->nullable();
             $table->string('sss', 100)->nullable();
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->foreign('blood_type_id')->references('id')->on('blood_types');
             $table->foreign('employee_type_id')->references('id')->on('employee_types');
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('designation_id')->references('id')->on('designations');
         });
     }

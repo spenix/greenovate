@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('designations', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('department_id')->unsigned();
             $table->string('name');
             $table->enum('status', ['Y', 'N'])->default('Y');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('designations');
+        Schema::dropIfExists('departments');
     }
 };

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('designations', function (Blueprint $table) {
+        Schema::create('emp_basic_salaries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('department_id')->unsigned();
-            $table->string('name');
+            $table->unsignedBigInteger('designation_id');
+            $table->decimal('basic_salary', 10, 2)->default(0);
             $table->enum('status', ['Y', 'N'])->default('Y');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreign('designation_id')->references('id')->on('designations');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('designations');
+        Schema::dropIfExists('emp_basic_salaries');
     }
 };

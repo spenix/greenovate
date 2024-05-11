@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Http\Requests\{StoreEmployeeRequest, UpdateEmployeeRequest};
-use App\Models\{BloodType, Designation, EducationalAttainment, EducationalLevel, EmployeeType, FamilyBackground, RelationshipType, WorkExperience};
+use App\Models\{Employee, BloodType,EmpBasicSalary, Designation, Department, EducationalAttainment, EducationalLevel, EmployeeType, FamilyBackground, RelationshipType, WorkExperience};
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Redirect;
@@ -26,9 +25,11 @@ class EmployeeController extends Controller
             ],
             'bloodTypes' => BloodType::where('status', 'Y')->get(),
             'employeeTypes' => EmployeeType::where('status', 'Y')->get(),
+            'departments' => Department::where('status', 'Y')->get(),
             'designations' => Designation::where('status', 'Y')->get(),
             'relationshipTypes' => RelationshipType::where('status', 'Y')->get(),
             'educationalLevels' => EducationalLevel::where('status', 'Y')->get(),
+            'basicSalaries' => EmpBasicSalary::where('status', 'Y')->selectRaw('designation_id, basic_salary')->get(),
             'years' => range(1970, date('Y')),
             'current_year' => date('Y')
         ]);
@@ -84,7 +85,8 @@ class EmployeeController extends Controller
                 'contact_no' => $request->contact_no,
                 'email' => $request->email,
                 'employee_type_id' => $request->employee_type,
-                'designation_id' => $request->department,
+                'department_id' => $request->department,
+                'designation_id' => $request->position,
                 'date_hired' => $request->date_hired,
                 'sss' => $request->sss,
                 'tin' => $request->tin,
@@ -217,7 +219,8 @@ class EmployeeController extends Controller
                 'contact_no' => $request->contact_no,
                 'email' => $request->email,
                 'employee_type_id' => $request->employee_type,
-                'designation_id' => $request->department,
+                'department_id' => $request->department,
+                'designation_id' => $request->position,
                 'date_hired' => $request->date_hired,
                 'sss' => $request->sss,
                 'tin' => $request->tin,

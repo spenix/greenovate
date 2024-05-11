@@ -28,4 +28,14 @@ class Employee extends Model
     {
         return $this->hasMany(EducationalAttainment::class, 'employee_id', 'id');
     }
+
+    public function deductions(): HasMany
+    {
+        return $this->hasMany(Deduction::class, 'employee_id', 'id');
+    }
+
+    public function compensations(): HasMany
+    {
+        return $this->hasMany(Compensation::class, 'employee_id', 'id');
+    }
 }

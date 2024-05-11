@@ -6,14 +6,20 @@ use App\Http\Controllers\{
     LeaveCreditController,
     EmployeeController,
     AttendanceController,
+    DepartmentController,
+    DesignationController,
     EmployeeLeaveController,
     PayrollController,
     PayslipController,
     PerformanceController,
-    ViolationTypeController
+    ViolationTypeController,
+    DeductionController,
+    CompensationController,
+    EmpBasicSalaryController
 };
 use App\Models\Attendance;
 use App\Models\AttendanceAttachment;
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use Illuminate\Support\Facades\Route;
@@ -124,6 +130,44 @@ Route::middleware('auth')->group(function () {
     Route::post('violation-types/store', [ViolationTypeController::class, 'store'])->name('violation-types.store');
     Route::put('violation-types/update/{id}', [ViolationTypeController::class, 'update'])->name('violation-types.update');
     Route::delete('violation-types/destroy/{id}', [ViolationTypeController::class, 'destroy'])->name('violation-types.destroy');
+
+    Route::get('departments', [DepartmentController::class, 'index'])->name('departments');
+    Route::get('departments/show/{id}', [DepartmentController::class, 'show']);
+    Route::get('departments/show_table_data', [DepartmentController::class, 'show_table_data']);
+    Route::post('departments/store', [DepartmentController::class, 'store'])->name('departments.store');
+    Route::put('departments/update/{id}', [DepartmentController::class, 'update'])->name('departments.update');
+    Route::delete('departments/destroy/{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+
+    Route::get('positions', [DesignationController::class, 'index'])->name('positions');
+    Route::get('positions/show/{id}', [DesignationController::class, 'show']);
+    Route::get('positions/show_table_data', [DesignationController::class, 'show_table_data']);
+    Route::post('positions/store', [DesignationController::class, 'store'])->name('positions.store');
+    Route::put('positions/update/{id}', [DesignationController::class, 'update'])->name('positions.update');
+    Route::delete('positions/destroy/{id}', [DesignationController::class, 'destroy'])->name('positions.destroy');
+
+    Route::get('deductions', [DeductionController::class, 'index'])->name('deductions');
+    Route::get('deductions/show/{id}', [DeductionController::class, 'show']);
+    Route::get('deductions/show_table_data', [DeductionController::class, 'show_table_data']);
+    Route::get('deductions/show_personnel_table_data', [DeductionController::class, 'show_personnel_table_data']);
+    Route::post('deductions/store', [DeductionController::class, 'store'])->name('deductions.store');
+    Route::put('deductions/update/{id}', [DeductionController::class, 'update'])->name('deductions.update');
+    Route::delete('deductions/destroy/{id}', [DeductionController::class, 'destroy'])->name('deductions.destroy');
+
+
+    Route::get('compensations', [CompensationController::class, 'index'])->name('compensations');
+    Route::get('compensations/show/{id}', [CompensationController::class, 'show']);
+    Route::get('compensations/show_table_data', [CompensationController::class, 'show_table_data']);
+    Route::get('compensations/show_personnel_table_data', [CompensationController::class, 'show_personnel_table_data']);
+    Route::post('compensations/store', [CompensationController::class, 'store'])->name('compensations.store');
+    Route::put('compensations/update/{id}', [CompensationController::class, 'update'])->name('compensations.update');
+    Route::delete('compensations/destroy/{id}', [CompensationController::class, 'destroy'])->name('compensations.destroy');
+
+    Route::get('basic-salary', [EmpBasicSalaryController::class, 'index'])->name('basic-salary');
+    Route::get('basic-salary/show/{id}', [EmpBasicSalaryController::class, 'show']);
+    Route::get('basic-salary/show_table_data', [EmpBasicSalaryController::class, 'show_table_data']);
+    Route::post('basic-salary/store', [EmpBasicSalaryController::class, 'store'])->name('basic-salary.store');
+    Route::put('basic-salary/update/{id}', [EmpBasicSalaryController::class, 'update'])->name('basic-salary.update');
+    Route::delete('basic-salary/destroy/{id}', [EmpBasicSalaryController::class, 'destroy'])->name('basic-salary.destroy');
 });
 
 require __DIR__ . '/auth.php';

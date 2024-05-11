@@ -15,25 +15,61 @@ class DesignationSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Carpenter'
+                'name' => 'Accountant I',
+                'department_id' => 1
             ],
             [
-                'name' => 'Engineer'
+                'name' => 'Accountant II',
+                'department_id' => 1
             ],
             [
-                'name' => 'Welder'
+                'name' => 'Carpenter',
+                'department_id' => 2
             ],
             [
-                'name' => 'Plumber'
+                'name' => 'Engineer',
+                'department_id' => 2
             ],
             [
-                'name' => 'Foreman'
+                'name' => 'Welder',
+                'department_id' => 2
             ],
             [
-                'name' => 'Labor'
+                'name' => 'Plumber',
+                'department_id' => 2
             ],
             [
-                'name' => 'Security Guard'
+                'name' => 'Foreman',
+                'department_id' => 2
+            ],
+            [
+                'name' => 'Labor',
+                'department_id' => 2
+            ],
+            [
+                'name' => 'Security Guard',
+                'department_id' => 2
+            ],
+            [
+                'name' => 'HR Manager',
+                'department_id' => 3
+            ],
+            [
+                'name' => 'HR Coordinator',
+                'department_id' => 3
+            ],
+            [
+                'name' => 'HR Specialist',
+                'department_id' => 3
+            ],
+            [
+                'name' => 'Compensation Analyst',
+                'department_id' => 3
+            ],
+            [
+                'name' => 'Employee Relations Manager
+                ',
+                'department_id' => 3
             ],
         ];
 

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('designations', function (Blueprint $table) {
+        Schema::create('param_deductions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('department_id')->unsigned();
             $table->string('name');
+            $table->string('short_code', 100);
+            $table->decimal('amount', 8, 2)->nullable();
             $table->enum('status', ['Y', 'N'])->default('Y');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('designations');
+        Schema::dropIfExists('param_deductions');
     }
 };
