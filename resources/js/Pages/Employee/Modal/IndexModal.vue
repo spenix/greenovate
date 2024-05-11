@@ -225,8 +225,7 @@ const getBasicSalary = (evt) => {
     var result = page.props?.basicSalaries.find(d => {
         return d.designation_id == evt.target.value
     })
-    console.log('result', result)
-    form.rate = converToCurrencyFormat(result.basic_salary);
+    form.rate = converToCurrencyFormat(result?.basic_salary ?? 0);
 }
 
 watch(props?.modalAttrs, (newValue) => {
