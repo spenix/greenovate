@@ -237,7 +237,8 @@ class CompensationController extends Controller
                     'end_date' => 'The end date is required.',
                 ])->onlyInput('end_date');
             } else {
-                $payload['end_date'] = null;
+                if ($validated['isPresent'] && !is_null($validated['end_date']))
+                    $payload['date_end'] = null;
             }
             //code...
             $isExist = Compensation::where($payload)->where('id', '!=', $id)->count();

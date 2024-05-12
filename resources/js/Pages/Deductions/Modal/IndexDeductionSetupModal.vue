@@ -10,12 +10,12 @@ const { isNumber, converToCurrencyFormat } = commonFuntions();
 const emit = defineEmits(["reloadPageData"]);
 const page = usePage()
 
-const benefits = ref(page.props?.benefits ?? []);
+const deductions = ref(page.props?.deductions ?? []);
 const employees = ref(page.props?.employees ?? []);
 const emp_id_select = ref();
 const form = useForm({
     id: "",
-    benefit: "",
+    deduction: "",
     amount: "",
     employee: "",
     start_date: "",
@@ -34,7 +34,7 @@ const props = defineProps({
 
 const submitData = () => {
   if (props?.modalAttrs?.action == "EDIT") {
-        form.put(route('compensations.update-emp-setup', [form.id]), {
+        form.put(route('deductions.update-emp-setup', [form.id]), {
             preserveScroll: true,
             onSuccess: () => resetFormData(),
             onError: () => {
@@ -48,7 +48,7 @@ const submitData = () => {
             },
         });
     } else {
-        form.post(route('compensations.store-emp-setup'), {
+        form.post(route('deductions.store-emp-setup'), {
             preserveScroll: true,
             onSuccess: () => resetFormData(),
             onError: () => {
@@ -68,7 +68,7 @@ const resetFormData = () => {
     resetFormAction();
     notify(
         "Success",
-        `Compensation setup was ${
+        `Deduction setup was ${
             props?.modalAttrs?.action == "EDIT" ? "updated" : "saved"
         } successfully.`,
         "success"
@@ -95,9 +95,9 @@ const converToCurrency = (evt) => {
             }
     form.amount = val
 }
-const getBenefitDetail = (evt) => {
+const getDeductionDetail = (evt) => {
  
-  var result = benefits.value.find(d => {
+  var result = deductions.value.find(d => {
     return d.id = evt.target.value
   });
 
@@ -122,14 +122,14 @@ watch(props?.modalAttrs, (newValue) => {
         http.get(`${page?.url}/show_employee_setup/${newValue?.dataId}`).then(
             ({ data, status }) => {
               form.id = data?.id
-              form.benefit = data?.param_benefit_id
+              form.deduction = data?.param_deduction_id
               emp_id_select.value[0].selectize.setValue(data.employee_id)
               form.employee = data?.employee_id
-              form.start_date = moment(data.start_date).format("YYYY-MM-DD");
-              form.end_date = data?.end_date ? moment(data.end_date).format("YYYY-MM-DD"): "";
+              form.start_date = moment(data.date_start).format("YYYY-MM-DD");
+              form.end_date = data?.end_date ? moment(data.date_end).format("YYYY-MM-DD"): "";
               form.isPresent = data?.end_date ? false : true
-              var result = benefits.value.find(d => {
-                return d.id = data?.param_benefit_id
+              var result = deductions.value.find(d => {
+                return d.id = data?.param_deduction_id
               });
 
               form.amount = converToCurrencyFormat(result.amount)
@@ -195,33 +195,33 @@ onMounted(() => {
                   <ErrorMessage :message="form.errors.employee"/>
                 </div>
                 <div class="col-12 mt-1">
-                  <label for="benefit" class="form-label">Compensation/Benefit</label>
+                  <label for="deduction" class="form-label">Deduction</label>
                   <select 
-                    id="benefit" 
+                    id="deduction" 
                     class="form-select"
-                    :class="form.errors.benefit ? 'error-field' : ''"
-                    v-model="form.benefit"
-                    @change="getBenefitDetail($event)"
+                    :class="form.errors.deduction ? 'error-field' : ''"
+                    v-model="form.deduction"
+                    @change="getDeductionDetail($event)"
                     :disabled="props?.modalAttrs?.action == 'VIEW'"
                   >
                     <option value="" hidden>
-                        Select Compensation/Benefit
+                        Select Deduction
                     </option>
                     <option 
                     v-for="(
                           d, i
-                      ) in benefits"
+                      ) in deductions"
                       :key="d.id"
                       :value="d.id"
                       :selected="
-                          form.benefit ==
+                          form.deduction ==
                           d?.id
                       "
                     >
                     {{ `[${d?.short_code}] ${d?.name}` }}
                     </option>
                   </select>
-                  <ErrorMessage :message="form.errors.benefit"/>
+                  <ErrorMessage :message="form.errors.deduction"/>
                 </div>
                 <div class="col-12 mt-1">
                   <label for="amount" class="form-label">Amount</label>

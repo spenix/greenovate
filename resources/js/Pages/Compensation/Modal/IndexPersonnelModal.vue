@@ -91,7 +91,7 @@ watch(props?.modalAttrs, (newValue) => {
                               ) in form.emp_details?.compensations"
                               :key="d.id"
                               >
-                                <td>{{ `${d?.benefit?.short_code} ${d?.benefit?.classification}` }}</td>
+                                <td>{{ `[${d?.benefit?.short_code}] ${d?.benefit?.name}` }}</td>
                                 <td class="text-end" width="30%">
                                 {{ converToCurrencyFormat(d?.benefit?.amount) }}
                                 </td>
@@ -116,7 +116,7 @@ watch(props?.modalAttrs, (newValue) => {
                               ) in form.emp_details?.deductions"
                               :key="d.id"
                               >
-                                <td>{{ `${d?.deduction_details?.short_code} ${d?.deduction_details?.classification}` }}</td>
+                                <td>{{ `[${d?.deduction_details?.short_code}] ${d?.deduction_details?.name}` }}</td>
                                 <td class="text-end" width="30%">
                                 {{ converToCurrencyFormat(d?.deduction_details?.amount) }}
                                 </td>

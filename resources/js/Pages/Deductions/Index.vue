@@ -4,6 +4,7 @@ import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
 import PageModal from '@/Pages/Deductions/Modal/IndexModal.vue';
 import PersonnelModal from '@/Pages/Deductions/Modal/IndexPersonnelModal.vue';
+import ManageModal from '@/Pages/Deductions/Modal/IndexManageModal.vue';
 import notify from "@/common/notification.js";
 import { Link, Head, usePage, router } from '@inertiajs/vue3';
 import { onMounted, ref} from "vue";
@@ -18,6 +19,12 @@ const modalAttrs = ref({
 });
 const modalPersonnelAttrs = ref({
     modalId: "personnel-modal",
+    title: "DEDUCTION",
+    action: "",
+});
+
+const modalManageAttrs = ref({
+    modalId: "manage-deduction-modal",
     title: "DEDUCTION",
     action: "",
 });
@@ -99,6 +106,11 @@ const reloadPersonnelDatatable = () => {
     setPersonnelTableBtnAction();
 };
 const setTableBtnAction = () => {
+    $("#deductions-table").on("click", ".manage-btn-option", (e) => {
+        e.stopImmediatePropagation();
+        var id = $(e.target).data("id");
+        btnActionFunc(id, "MANAGE");
+    });
     $("#deductions-table").on("click", ".view-btn-option", (e) => {
         e.stopImmediatePropagation();
         var id = $(e.target).data("id");
@@ -125,55 +137,18 @@ const setPersonnelTableBtnAction = () => {
 };
 
 const btnPersonnelActionFunc = (id, action) => {
-    modalAttrs.value.dataId = id;
-    modalAttrs.value.title = `${action} DEDUCTION`;
-    modalAttrs.value.action = action;
-    if (["ADD", "EDIT", "VIEW"].includes(action)) {
+    modalPersonnelAttrs.value.dataId = id;
+    modalPersonnelAttrs.value.title = `${action} EMPLOYEE COMPENSATION/BENEFITS & DEDUCTIONS`;
+    modalPersonnelAttrs.value.action = action;
+    if (["MANAGE"].includes(action)) {
         $(
             `#${
-                modalAttrs.value?.modalId
-                    ? modalAttrs.value?.modalId
+                modalPersonnelAttrs.value?.modalId
+                    ? modalPersonnelAttrs.value?.modalId
                     : "page-modal"
             }`
         ).modal("show");
-    } else {
-        swal("Are you sure you want to delete data?", {
-            buttons: {
-                cancel: "Cancel",
-                catch: {
-                    text: "Yes",
-                    value: "catch",
-                },
-                // defeat: true,
-            },
-        }).then((value) => {
-            switch (value) {
-                case "catch":
-                    router.delete(`${page?.url}/destroy/${id}`, {
-                        onSuccess: () => {
-                            swal(
-                                "Success!",
-                                "Deduction record was deleted successfully.",
-                                "success"
-                            ),
-                            reloadDatatableAjax();
-                        },
-                        onError: () => {
-                            if (form.errors.errorMessage) {
-                                    notify(
-                                        "Error",
-                                        form.errors.errorMessage,
-                                        "danger"
-                                    );
-                                }
-                        },
-                    });
-                    break;
-                default:
-                    swal.close();
-            }
-        });
-    }
+    } 
 };
 
 const btnActionFunc = (id, action) => {
@@ -185,6 +160,17 @@ const btnActionFunc = (id, action) => {
             `#${
                 modalAttrs.value?.modalId
                     ? modalAttrs.value?.modalId
+                    : "page-modal"
+            }`
+        ).modal("show");
+    } else if (action == 'MANAGE') {
+        modalManageAttrs.value.dataId = id;
+        modalManageAttrs.value.title = `${action} DEDUCTION`;
+        modalManageAttrs.value.action = action;
+        $(
+            `#${
+                modalManageAttrs.value?.modalId
+                    ? modalManageAttrs.value?.modalId
                     : "page-modal"
             }`
         ).modal("show");
@@ -306,8 +292,12 @@ onMounted(() => {
             :modalAttrs="modalAttrs"
             @reloadPageData="reloadDatatableAjax()"
         />
-        <PageModal 
-            :modalAttrs="modalAttrs"
+        <ManageModal 
+            :modalAttrs="modalManageAttrs"
+            @reloadPageData="reloadDatatableAjax()"
+        />
+        <PersonnelModal 
+            :modalAttrs="modalPersonnelAttrs"
             @reloadPersonnelPageData="reloadPersonnelDatatableAjax()"
         />
     </main>

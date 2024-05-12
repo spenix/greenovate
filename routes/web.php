@@ -147,12 +147,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('deductions', [DeductionController::class, 'index'])->name('deductions');
     Route::get('deductions/show/{id}', [DeductionController::class, 'show']);
+    Route::get('deductions/show_employee_details/{id}', [DeductionController::class, 'show_employee_details']);
+    Route::get('deductions/show_employee_setup/{id}', [DeductionController::class, 'show_employee_setup']);
     Route::get('deductions/show_table_data', [DeductionController::class, 'show_table_data']);
+    Route::get('deductions/show_deduction_manage_table', [DeductionController::class, 'show_deduction_manage_table']);
     Route::get('deductions/show_personnel_table_data', [DeductionController::class, 'show_personnel_table_data']);
     Route::post('deductions/store', [DeductionController::class, 'store'])->name('deductions.store');
+    Route::post('deductions/store_emp_setup', [DeductionController::class, 'store_emp_setup'])->name('deductions.store-emp-setup');
     Route::put('deductions/update/{id}', [DeductionController::class, 'update'])->name('deductions.update');
+    Route::put('deductions/update_emp_setup/{id}', [DeductionController::class, 'update_emp_setup'])->name('deductions.update-emp-setup');
     Route::delete('deductions/destroy/{id}', [DeductionController::class, 'destroy'])->name('deductions.destroy');
-
+    Route::delete('deductions/destroy_deduction/{id}', [DeductionController::class, 'destroy_deduction'])->name('compensations.destroy_deduction');
 
     Route::get('compensations', [CompensationController::class, 'index'])->name('compensations');
     Route::get('compensations/show/{id}', [CompensationController::class, 'show']);
