@@ -597,7 +597,6 @@ watch(props?.modalAttrs, (newValue) => {
                                                 aria-label="Select Civil Status"
                                                 :class="form.errors.civil_status ? 'error-field' : ''"
                                                 v-model="form.civil_status"
-                                                @change="getBasicSalary($event)"
                                                 :disabled="modalAttrs?.action == 'VIEW'"
                                             >
                                                 <option value="" hidden>
