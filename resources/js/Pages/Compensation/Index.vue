@@ -137,7 +137,7 @@ const setPersonnelTableBtnAction = () => {
 
 const btnPersonnelActionFunc = (id, action) => {
     modalPersonnelAttrs.value.dataId = id;
-    modalPersonnelAttrs.value.title = `${action} EMPLOYEE COMPENSATION/BENEFITS`;
+    modalPersonnelAttrs.value.title = `${action} EMPLOYEE COMPENSATION/BENEFITS & DEDUCTIONS`;
     modalPersonnelAttrs.value.action = action;
     if (["MANAGE"].includes(action)) {
         $(
