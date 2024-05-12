@@ -4,8 +4,6 @@ import { usePage, useForm } from '@inertiajs/vue3';
 import { ref, watch} from "vue";
 import moment from "moment";
 import http from "@/utils/https";
-import { commonFuntions } from "@/common/common-function.js";
-const { converToCurrencyFormat } = commonFuntions();
 const page = usePage()
 const activeTab = ref('compensation');
 const form = useForm({

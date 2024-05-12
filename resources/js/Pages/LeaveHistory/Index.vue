@@ -3,14 +3,13 @@ import HeaderLayout from '@/Layouts/HeaderLayout.vue';
 import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
 import PageModal from '@/Pages/LeaveHistory/Modal/IndexModal.vue';
-import notify from "@/common/notification.js";
-import { Link, Head, usePage, router } from '@inertiajs/vue3';
+import { Link, Head, usePage } from '@inertiajs/vue3';
 import { onMounted, ref} from "vue";
 
 const page = usePage()
 const table = ref({});
 const modalAttrs = ref({
-    modalId: "department-modal",
+    modalId: "leave-history-modal",
     title: "EMPLOYEE LEAVE HISTORY",
     action: "",
 });
@@ -20,12 +19,10 @@ const props = defineProps({
     },
 });
 
-const reloadDatatableAjax = () => {
-    modalAttrs.value.action = "";
-    table.value.ajax.reload();
-};
+
 const reloadDatatable = () => {
-    table.value = $("#emp-leave-history-table").DataTable({
+    table.value?.ajax?.reload();
+    table.value = $("#leave-history-table").DataTable({
         processing: true,
         serverSide: true,
         ajax: `${page.url}/show_table_data`,
@@ -48,11 +45,10 @@ const reloadDatatable = () => {
             },
         ],
     });
-
     setTableBtnAction();
 };
 const setTableBtnAction = () => {
-    $("#emp-leave-history-table").on("click", ".manage-btn-option", (e) => {
+    $("#leave-history-table").on("click", ".manage-btn-option", (e) => {
         e.stopImmediatePropagation();
         var id = $(e.target).data("id");
         btnActionFunc(id, "MANAGE");
@@ -99,14 +95,14 @@ onMounted(() => {
               <div class="card-body">
                 <h5 class="card-title">Employee List</h5>
                 <div class="row">
-                    <!-- <div class="col-12 p-2 text-end">
-                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Department</button>
-                    </div> -->
+                    <div class="col-12 p-2 text-end">
+                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')" hidden>Add Employee Leave</button>
+                    </div>
                     <div class="col-12 p-2">
                         <div class="table-responsive">
                             <table
                                 class="table table-bordered table-sm display"
-                                id="emp-leave-history-table"
+                                id="leave-history-table"
                                 style="width: 100% !important"
                             ></table>
                         </div>
