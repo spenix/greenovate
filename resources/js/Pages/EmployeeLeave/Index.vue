@@ -41,7 +41,7 @@ const reloadDatatable = () => {
                 }, 
             },
             { data: "leave_entitlement", title: "Entitlement" },
-            { data: "running_balance", title: "Running Balance", className: "text-center" },
+            { data: "running_balance", title: "Remaining Balance", className: "text-center" },
             {
                 data: "id",
                 title: "Action",

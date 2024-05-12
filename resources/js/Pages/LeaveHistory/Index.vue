@@ -30,7 +30,7 @@ const reloadDatatable = () => {
             { data: "employee_name", title: "Employee Name" },
             { data: "department", title: "Department" },
             { data: "designation", title: "Position" },
-            { data: "running_balance", title: "Running Balance" },
+            { data: "running_balance", title: "Remaining Balance" },
             {
                 data: "id",
                 title: "Action",
