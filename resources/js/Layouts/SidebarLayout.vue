@@ -2,8 +2,6 @@
 import { Link, usePage } from '@inertiajs/vue3';
 const page = usePage()
 const user = usePage().props.auth.user;
-
-console.log('user', user);
 </script>
 
 <template>

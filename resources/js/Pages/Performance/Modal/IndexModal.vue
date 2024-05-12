@@ -182,12 +182,12 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="inputText" class="col-sm-5 col-form-label">Designation:</label>
+                        <label for="inputText" class="col-sm-5 col-form-label">Position:</label>
                         <div class="col-sm-7">
                             <input 
                                 type="text" 
                                 class="form-control" 
-                                placeholder="Designation" 
+                                placeholder="Position" 
                                 autocomplete="off"
                                 v-model="form.department"
                                 :disabled="modalAttrs?.action == 'VIEW'"

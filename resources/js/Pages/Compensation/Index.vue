@@ -4,6 +4,7 @@ import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
 import PageModal from '@/Pages/Compensation/Modal/IndexModal.vue';
 import PersonnelModal from '@/Pages/Compensation/Modal/IndexPersonnelModal.vue';
+import ManageModal from '@/Pages/Compensation/Modal/IndexManageModal.vue';
 import notify from "@/common/notification.js";
 import { Link, Head, usePage, router } from '@inertiajs/vue3';
 import { onMounted, ref} from "vue";
@@ -13,12 +14,17 @@ const table = ref({});
 const personnelTable = ref({});
 const modalAttrs = ref({
     modalId: "compensations-modal",
-    title: "COMPENSATION",
+    title: "COMPENSATION/BENEFITS",
     action: "",
 });
 const modalPersonnelAttrs = ref({
-    modalId: "personnel-modal",
-    title: "DEDUCTION",
+    modalId: "manage-personnel-modal",
+    title: "COMPENSATION/BENEFITS",
+    action: "",
+});
+const modalManageAttrs = ref({
+    modalId: "manage-compensation-modal",
+    title: "COMPENSATION/BENEFITS",
     action: "",
 });
 const props = defineProps({
@@ -41,7 +47,7 @@ const reloadDatatable = () => {
         serverSide: true,
         ajax: `${page.url}/show_table_data`,
         columns: [
-            { data: "name", title: "Compensation" },
+            { data: "name", title: "Compensation/Benefits" },
             { data: "short_code", title: "Short Code" },
             { data: "status", title: "Status", className: "text-center", },
             {
@@ -99,6 +105,11 @@ const reloadPersonnelDatatable = () => {
     setPersonnelTableBtnAction();
 };
 const setTableBtnAction = () => {
+    $("#compensations-table").on("click", ".manage-btn-option", (e) => {
+        e.stopImmediatePropagation();
+        var id = $(e.target).data("id");
+        btnActionFunc(id, "MANAGE");
+    });
     $("#compensations-table").on("click", ".view-btn-option", (e) => {
         e.stopImmediatePropagation();
         var id = $(e.target).data("id");
@@ -125,66 +136,41 @@ const setPersonnelTableBtnAction = () => {
 };
 
 const btnPersonnelActionFunc = (id, action) => {
-    modalAttrs.value.dataId = id;
-    modalAttrs.value.title = `${action} COMPENSATION`;
-    modalAttrs.value.action = action;
-    if (["ADD", "EDIT", "VIEW"].includes(action)) {
+    modalPersonnelAttrs.value.dataId = id;
+    modalPersonnelAttrs.value.title = `${action} EMPLOYEE COMPENSATION/BENEFITS`;
+    modalPersonnelAttrs.value.action = action;
+    if (["MANAGE"].includes(action)) {
         $(
             `#${
-                modalAttrs.value?.modalId
-                    ? modalAttrs.value?.modalId
+                modalPersonnelAttrs.value?.modalId
+                    ? modalPersonnelAttrs.value?.modalId
                     : "page-modal"
             }`
         ).modal("show");
-    } else {
-        swal("Are you sure you want to delete data?", {
-            buttons: {
-                cancel: "Cancel",
-                catch: {
-                    text: "Yes",
-                    value: "catch",
-                },
-                // defeat: true,
-            },
-        }).then((value) => {
-            switch (value) {
-                case "catch":
-                    router.delete(`${page?.url}/destroy/${id}`, {
-                        onSuccess: () => {
-                            swal(
-                                "Success!",
-                                "Compensation record was deleted successfully.",
-                                "success"
-                            ),
-                            reloadDatatableAjax();
-                        },
-                        onError: () => {
-                            if (form.errors.errorMessage) {
-                                    notify(
-                                        "Error",
-                                        form.errors.errorMessage,
-                                        "danger"
-                                    );
-                                }
-                        },
-                    });
-                    break;
-                default:
-                    swal.close();
-            }
-        });
-    }
+    } 
 };
 
 const btnActionFunc = (id, action) => {
     modalAttrs.value.dataId = id;
-    modalAttrs.value.title = `${action} COMPENSATION`;
+    modalAttrs.value.title = `${action} COMPENSATION/BENEFITS`;
     modalAttrs.value.action = action;
     if (["ADD", "EDIT", "VIEW"].includes(action)) {
         $(
             `#${
                 modalAttrs.value?.modalId
                     ? modalAttrs.value?.modalId
+                    : "page-modal"
+            }`
+        ).modal("show");
+    } 
+    else if (action == 'MANAGE') {
+        modalManageAttrs.value.dataId = id;
+        modalManageAttrs.value.title = `${action} COMPENSATION/BENEFITS`;
+        modalManageAttrs.value.action = action;
+        $(
+            `#${
+                modalManageAttrs.value?.modalId
+                    ? modalManageAttrs.value?.modalId
                     : "page-modal"
             }`
         ).modal("show");
@@ -205,7 +191,7 @@ const btnActionFunc = (id, action) => {
                         onSuccess: () => {
                             swal(
                                 "Success!",
-                                "Compensation record was deleted successfully.",
+                                "Compensation/BenefitS record was deleted successfully.",
                                 "success"
                             ),
                             reloadDatatableAjax();
@@ -235,25 +221,25 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Compensations" />
+    <Head title="Compensation and Benefits" />
     <HeaderLayout :systemSetup="systemSetup"/>
     <SidebarLayout />
     <main id="main" class="main">
         <div class="pagetitle">
-        <h1>Compensations</h1>
+        <h1>Compensation and Benefits</h1>
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <Link :href="route('payroll')">Payroll</Link>
             </li>
-            <li class="breadcrumb-item active">Compensations</li>
+            <li class="breadcrumb-item active">Compensation and Benefits</li>
             </ol>
         </nav>
         </div>
         <section class="section">
             <div class="card">
             <div class="card-body">
-             <h5 class="card-title">Compensation Records</h5>
+             <h5 class="card-title">Compensation and BenefitS Records</h5>
 
               <!-- Bordered Tabs Justified -->
               <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
@@ -261,7 +247,7 @@ onMounted(() => {
                   <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#compensation-personel-tab" type="button" role="tab" aria-controls="personnel" aria-selected="true">EMPLOYEE LIST</button>
                 </li>
                 <li class="nav-item flex-fill" role="presentation">
-                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#compensation-list-tab" type="button" role="tab" aria-controls="deduction" aria-selected="false" tabindex="-1">COMPENSATION LIST</button>
+                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#compensation-list-tab" type="button" role="tab" aria-controls="deduction" aria-selected="false" tabindex="-1">COMPENSATION/BENEFITS LIST</button>
                 </li>
                 
               </ul>
@@ -282,7 +268,7 @@ onMounted(() => {
                 <div class="tab-pane fade" id="compensation-list-tab" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="row">
                     <div class="col-12 p-2 text-end">
-                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Compensation</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Compensation/Benefits</button>
                     </div>
                     <div class="col-12 p-2">
                         <div class="table-responsive">
@@ -306,8 +292,12 @@ onMounted(() => {
             :modalAttrs="modalAttrs"
             @reloadPageData="reloadDatatableAjax()"
         />
-        <PageModal 
-            :modalAttrs="modalAttrs"
+        <ManageModal 
+            :modalAttrs="modalManageAttrs"
+            @reloadPageData="reloadDatatableAjax()"
+        />
+        <PersonnelModal 
+            :modalAttrs="modalPersonnelAttrs"
             @reloadPersonnelPageData="reloadPersonnelDatatableAjax()"
         />
     </main>

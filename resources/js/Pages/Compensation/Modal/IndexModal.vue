@@ -118,7 +118,7 @@ watch(props?.modalAttrs, (newValue) => {
             <div class="modal-body">
               <div class="row">
                 <div class="col-12 mt-1">
-                  <label for="compensation" class="form-label">Compensation</label>
+                  <label for="compensation" class="form-label">Compensation/Benefit</label>
                   <input 
                     type="text" 
                     class="form-control" 

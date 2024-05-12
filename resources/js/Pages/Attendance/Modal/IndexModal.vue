@@ -16,7 +16,7 @@ const form = useForm({
     id: "",
     employee_id: "",
     employee_name: "",
-    department: "",
+    position: "",
     employee_type: "",
     shift: ""
 });
@@ -107,7 +107,7 @@ const getSelectedEmp = (selectedVal) => {
     });
     form.employee_id = emp?.id;
     form.employee_name = emp?.employee_name;
-    form.department = emp?.designation;
+    form.position = emp?.designation;
     form.employee_type = emp?.employee_type;
     shifts.value = shifts.value.filter(d => {
       if (d.id == 3 ) {
@@ -182,20 +182,20 @@ onMounted(() => {
                   <ErrorMessage :message="form.errors.employee_name"/>
                 </div>
                 <div class="col-12 mt-2">
-                  <label for="department" class="form-label">Department</label>
+                  <label for="position" class="form-label">Position</label>
                   <input 
                     type="text" 
                     class="form-control" 
-                    name="department" 
-                    id="department"
+                    name="position" 
+                    id="position"
                     autocomplete="off"
-                    placeholder="Department"
-                    :class="form.errors.department ? 'error-field' : ''"
-                    v-model="form.department"
+                    placeholder="Position"
+                    :class="form.errors.position ? 'error-field' : ''"
+                    v-model="form.position"
                     :disabled="props?.modalAttrs?.action == 'VIEW'"
                     readonly
                   >
-                  <ErrorMessage :message="form.errors.department"/>
+                  <ErrorMessage :message="form.errors.position"/>
                 </div>
                 <div class="col-12 mt-2">
                   <label for="employee_type" class="form-label">Employee Type</label>

@@ -156,11 +156,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('compensations', [CompensationController::class, 'index'])->name('compensations');
     Route::get('compensations/show/{id}', [CompensationController::class, 'show']);
+    Route::get('compensations/show_employee_details/{id}', [CompensationController::class, 'show_employee_details']);
+    Route::get('compensations/show_employee_setup/{id}', [CompensationController::class, 'show_employee_setup']);
     Route::get('compensations/show_table_data', [CompensationController::class, 'show_table_data']);
+    Route::get('compensations/show_compensation_manage_table', [CompensationController::class, 'show_compensation_manage_table']);
+    Route::get('compensations/search_employees', [CompensationController::class, 'search_employees']);
     Route::get('compensations/show_personnel_table_data', [CompensationController::class, 'show_personnel_table_data']);
     Route::post('compensations/store', [CompensationController::class, 'store'])->name('compensations.store');
+    Route::post('compensations/store_emp_setup', [CompensationController::class, 'store_emp_setup'])->name('compensations.store-emp-setup');
     Route::put('compensations/update/{id}', [CompensationController::class, 'update'])->name('compensations.update');
+    Route::put('compensations/update_emp_setup/{id}', [CompensationController::class, 'update_emp_setup'])->name('compensations.update-emp-setup');
     Route::delete('compensations/destroy/{id}', [CompensationController::class, 'destroy'])->name('compensations.destroy');
+    Route::delete('compensations/destroy_compensation/{id}', [CompensationController::class, 'destroy_compensation'])->name('compensations.destroy_compensation');
 
     Route::get('basic-salary', [EmpBasicSalaryController::class, 'index'])->name('basic-salary');
     Route::get('basic-salary/show/{id}', [EmpBasicSalaryController::class, 'show']);
