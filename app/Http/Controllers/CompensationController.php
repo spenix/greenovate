@@ -238,7 +238,7 @@ class CompensationController extends Controller
                 ])->onlyInput('end_date');
             } else {
                 if ($validated['isPresent'] && !is_null($validated['end_date']))
-                    $payload['date_end'] = null;
+                    $payload['end_date'] = null;
             }
             //code...
             $isExist = Compensation::where($payload)->where('id', '!=', $id)->count();
