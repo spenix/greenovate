@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     ViolationTypeController,
     DeductionController,
     CompensationController,
-    EmpBasicSalaryController
+    EmpBasicSalaryController,
+    LeaveHistoryController
 };
 use App\Models\Attendance;
 use App\Models\AttendanceAttachment;
@@ -137,6 +138,13 @@ Route::middleware('auth')->group(function () {
     Route::post('departments/store', [DepartmentController::class, 'store'])->name('departments.store');
     Route::put('departments/update/{id}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('departments/destroy/{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+
+    Route::get('leave-history', [LeaveHistoryController::class, 'index'])->name('leave-history');
+    Route::get('leave-history/show/{id}', [LeaveHistoryController::class, 'show']);
+    Route::get('leave-history/show_table_data', [LeaveHistoryController::class, 'show_table_data']);
+    Route::post('leave-history/store', [LeaveHistoryController::class, 'store'])->name('leave-history.store');
+    Route::put('leave-history/update/{id}', [LeaveHistoryController::class, 'update'])->name('leave-history.update');
+    Route::delete('leave-history/destroy/{id}', [LeaveHistoryController::class, 'destroy'])->name('leave-history.destroy');
 
     Route::get('positions', [DesignationController::class, 'index'])->name('positions');
     Route::get('positions/show/{id}', [DesignationController::class, 'show']);

@@ -40,7 +40,12 @@ const user = usePage().props.auth.user;
         <a class="nav-link" :class="['/employee-leaves', '/leave-types', '/leave-credits'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#leave-nav" data-bs-toggle="collapse" href="#">
         <i class="ri-sailboat-line"></i><span>Leave</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="leave-nav" class="nav-content collapse " :class="['/employee-leaves', '/leave-types', '/leave-credits'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <ul id="leave-nav" class="nav-content collapse " :class="['/employee-leaves', '/leave-types', '/leave-credits', '/leave-history'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <li>
+            <Link :href="route('leave-history')" class="nav-link" :class="page?.url == '/leave-history' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Leave History</span>
+            </Link>
+        </li>
         <li>
             <Link :href="route('employee-leaves')" class="nav-link" :class="page?.url == '/employee-leaves' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Employee Leave Credits</span>

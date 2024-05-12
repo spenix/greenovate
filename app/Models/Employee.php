@@ -38,4 +38,9 @@ class Employee extends Model
     {
         return $this->hasMany(Compensation::class, 'employee_id', 'id');
     }
+
+    public function leave_records(): HasMany
+    {
+        return $this->hasMany(EmployeeLeave::class, 'employee_id', 'id');
+    }
 }
