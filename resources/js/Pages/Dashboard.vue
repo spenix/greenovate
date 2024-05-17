@@ -1,4 +1,6 @@
 <script setup>
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
 import HeaderLayout from '@/Layouts/HeaderLayout.vue';
 import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
@@ -10,7 +12,13 @@ const regularEmployee = ref(page.props.regularEmployee);
 const terminatedEmployee = ref(page.props.terminatedEmployee);
 const onCallEmployee = ref(page.props.onCallEmployee);
 const onLeaveEmployee = ref(page.props.onLeaveEmployee);
-const attendanceCount = ref(page.props.attendanceCount);
+const projects = ref(page.props.projects);
+const calendarOptions = ref({
+        plugins: [dayGridPlugin],
+        initialView: 'dayGridMonth',
+        weekends: false,
+        events: page.props.events.map(d => { return {title: d?.name, start: d?.start_date, end: d?.end_date}})
+      });
 
 defineProps({
     systemSetup: {
@@ -130,13 +138,13 @@ defineProps({
                         <div class="col-xxl-3 col-md-4">
                         <div class="card info-card attendance-card">
                             <div class="card-body">
-                            <h5 class="card-title">Attendance</h5>
+                            <h5 class="card-title">Ongoing Projects</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="ri-calendar-check-line"></i>
+                                <i class="bi bi-building"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>{{attendanceCount}}</h6>
+                                    <h6>{{projects}}</h6>
                                 </div>
                             </div>
                             </div>
@@ -144,6 +152,12 @@ defineProps({
                         </div><!-- End Revenue Card -->
                 </div>
             </div>
+                <div class="col-lg-12 mt-4">
+                    <div class="card">
+                        <div class="card-body p-4"><FullCalendar :options='calendarOptions' /></div>
+                    </div>
+                    
+                </div>
             </div>
         </section>
     </main>

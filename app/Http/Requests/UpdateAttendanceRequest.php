@@ -23,7 +23,8 @@ class UpdateAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "employee_id" => 'required|integer|exists:employees,id',
+            "shift_code" => 'required|integer|exists:shift_codes,id',
         ];
     }
 }

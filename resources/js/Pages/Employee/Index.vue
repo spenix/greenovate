@@ -11,6 +11,12 @@ const page = usePage();
 const employeeTypes = ref(page.props.employeeTypes);
 const designations = ref(page.props.designations);
 
+const props = defineProps({
+    systemSetup: {
+        type: Object,
+    },
+});
+
 const table = ref({});
 const modalAttrs = ref({
     modalId: "employee-modal",

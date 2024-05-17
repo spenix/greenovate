@@ -24,7 +24,7 @@ class StoreAttendanceRequest extends FormRequest
     {
         return [
             "employee_id" => 'required|integer|exists:employees,id',
-            "shift" => 'required|integer|exists:shifts,id',
+            "shift_code" => 'required|integer|exists:shift_codes,id',
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payroll;
 use App\Http\Requests\StorePayrollRequest;
 use App\Http\Requests\UpdatePayrollRequest;
-use App\Models\Employee;
+use App\Models\{Employee, PayrollCompensation, PayrollDeduction};
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use DataTables;
@@ -18,7 +18,8 @@ class PayrollController extends Controller
      */
     public function index()
     {
-        $data = Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')
+        $data = Employee::with(['deductions.deduction_details', 'compensations.benefit', 'leave_records.leave_type', 'leave_records.leave_entitlement', 'attendance_records.attachments'])
+            ->join('employee_types', 'employee_types.id', 'employees.employee_type_id')
             ->join('designations', 'designations.id', 'employees.designation_id')
             ->selectRaw("
                 employees.*, 
@@ -30,6 +31,8 @@ class PayrollController extends Controller
             'systemSetup' => [
                 'nameShort' => config('app.name_short', 'Laravel'),
                 'appName' => config('app.name_upper', 'Laravel'),
+                'appFullName' => config('app.name', 'Laravel'),
+                'appAddress' => config('app.company_address', 'Laravel'),
                 'appLogo1' => config('app.logo1', 'Laravel'),
             ],
             'employees' => $data
@@ -61,35 +64,46 @@ class PayrollController extends Controller
     public function store(StorePayrollRequest $request)
     {
         try {
-            $payload = [];
-            foreach ($request->payroll_records as $key => $value) {
-                $payload[] = [
-                    "employee_id" => $value['employee_id'],
-                    "payment_rate" => $value['payment_rate'],
-                    "payment_start" => $value['payment_start'],
-                    "payment_period" => $value['payment_period'],
-                    "reg_hours" => $value['reg_hours'],
-                    "reg_hour_rate" => $value['reg_hour_rate'],
-                    "ot_hours" => $value['ot_hours'],
-                    "ot_hour_rate" => $value['ot_hour_rate'],
-                    "philhealth" => $value['philhealth'],
-                    "tin" => $value['tin'],
-                    "sss" => $value['sss'],
-                    "pag_ibig" => $value['pag_ibig'],
-                    "quarterly" => $value['quarterly'],
-                    "year_end" => $value['year_end'],
-                    "created_at" => now(),
-                ];
+            $payload = [
+                'employee_id' => $request->employee,
+                'period_start' => $request->period_start,
+                'period_end' => $request->period_end,
+            ];
+            //code...
+            $isExist = Payroll::where($payload)->count();
+            if ($isExist) {
+                return back()->withErrors([
+                    'errorMessage' => 'The employee payroll already been setup.',
+                ]);
             }
-
-            // //code...
-            // $isExist = Payroll::where($payload)->count();
-            // if ($isExist) {
-            //     return back()->withErrors([
-            //         'errorMessage' => 'The leave type has already been taken.',
-            //     ]);
-            // }
-            Payroll::insert($payload);
+            $payload['basic_salary'] = $request->basic_salary ?? 0;
+            $payload['working_hours'] = $request->working_hours ?? 0;
+            $payload['working_days'] = $request->working_days ?? 0;
+            $payload['ot_hours'] = $request->ot_hours ?? 0;
+            $payload['ot_compensation'] = $request->ot_compensation ?? 0;
+            $payroll = Payroll::create($payload);
+            if ($payroll->id) {
+                $deductions = [];
+                foreach ($request->deductions as $key => $value) {
+                    $deductions[] = [
+                        'payroll_id' => $payroll->id,
+                        'deduction_id' => $value['id'],
+                        'amount' => $value['amount'],
+                        'created_at' => now()
+                    ];
+                }
+                PayrollDeduction::insert($deductions);
+                $compensation = [];
+                foreach ($request->compensation as $key => $value) {
+                    $compensation[] = [
+                        'payroll_id' => $payroll->id,
+                        'compensation_id' => $value['id'],
+                        'amount' => $value['amount'],
+                        'created_at' => now()
+                    ];
+                }
+                PayrollCompensation::insert($compensation);
+            }
             return Redirect::route('payroll');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([
@@ -103,8 +117,18 @@ class PayrollController extends Controller
      */
     public function show(Payroll $payroll, $id)
     {
-        $data = $payroll::join('employees', 'employees.id', 'payrolls.employee_id')
-            ->selectRaw("payrolls.*, CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, employee_no")
+        $data = $payroll::with(['deductions.deduction_details', 'compensations.benefit'])
+            ->join('employees', 'employees.id', 'payrolls.employee_id')
+            ->join('employee_types', 'employee_types.id', 'employees.employee_type_id')
+            ->join('designations', 'designations.id', 'employees.designation_id')
+            ->selectRaw("
+                payrolls.*,
+                employees.date_hired,
+                CONCAT(employees.firstname, ' ', employees.lastname) as employee_name, 
+                employee_no,
+                employee_types.name as employee_type, 
+                designations.name designation
+                ")
             ->find($id);
         return response()->json($data);
     }
@@ -123,25 +147,48 @@ class PayrollController extends Controller
     public function update(UpdatePayrollRequest $request, $id)
     {
         try {
-            foreach ($request->payroll_records as $key => $value) {
-                $payload = [
-                    "employee_id" => $value['employee_id'],
-                    "payment_rate" => $value['payment_rate'],
-                    "payment_start" => $value['payment_start'],
-                    "payment_period" => $value['payment_period'],
-                    "reg_hours" => $value['reg_hours'],
-                    "reg_hour_rate" => $value['reg_hour_rate'],
-                    "ot_hours" => $value['ot_hours'],
-                    "ot_hour_rate" => $value['ot_hour_rate'],
-                    "philhealth" => $value['philhealth'],
-                    "tin" => $value['tin'],
-                    "sss" => $value['sss'],
-                    "pag_ibig" => $value['pag_ibig'],
-                    "quarterly" => $value['quarterly'],
-                    "year_end" => $value['year_end'],
-                    "created_at" => now(),
-                ];
-                Payroll::find($id)->update($payload);
+            $payload = [
+                'employee_id' => $request->employee,
+                'period_start' => $request->period_start,
+                'period_end' => $request->period_end,
+            ];
+            //code...
+            $isExist = Payroll::where($payload)->where('id', '!=', $id)->count();
+            if ($isExist) {
+                return back()->withErrors([
+                    'errorMessage' => 'The employee payroll already been setup.',
+                ]);
+            }
+            $payload['basic_salary'] = $request->basic_salary ?? 0;
+            $payload['working_hours'] = $request->working_hours ?? 0;
+            $payload['working_days'] = $request->working_days ?? 0;
+            $payload['ot_hours'] = $request->ot_hours ?? 0;
+            $payload['ot_compensation'] = $request->ot_compensation ?? 0;
+            $payroll = Payroll::find($id)->update($payload);
+            if ($payroll) {
+                $deductions = [];
+                PayrollDeduction::where('payroll_id', $id)->delete();
+                foreach ($request->deductions as $key => $value) {
+                    $deductions[] = [
+                        'payroll_id' => $id,
+                        'deduction_id' => $value['id'],
+                        'amount' => $value['amount'],
+                        'created_at' => now()
+                    ];
+                }
+                PayrollDeduction::insert($deductions);
+
+                $compensation = [];
+                PayrollCompensation::where('payroll_id', $id)->delete();
+                foreach ($request->compensation as $key => $value) {
+                    $compensation[] = [
+                        'payroll_id' => $id,
+                        'compensation_id' => $value['id'],
+                        'amount' => $value['amount'],
+                        'created_at' => now()
+                    ];
+                }
+                PayrollCompensation::insert($compensation);
             }
             return Redirect::route('payroll');
         } catch (\Throwable $e) {
@@ -154,8 +201,15 @@ class PayrollController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Payroll $payroll)
+    public function destroy(Payroll $payroll, $id)
     {
-        //
+        try {
+            $payroll::find($id)->delete();
+            return Redirect::route('payroll');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'errorMessage' => $e->getMessage(),
+            ]);
+        }
     }
 }

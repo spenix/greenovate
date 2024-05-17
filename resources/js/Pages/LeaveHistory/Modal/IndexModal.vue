@@ -50,6 +50,7 @@ watch(props?.modalAttrs, (newValue) => {
                           <ul class="list-unstyled">
                             <li class="mt-2"><span class="text-muted">Employee Fullname: </span>{{ form.emp_details?.employee_name }}</li>
                             <li class="mt-2"><span class="text-muted">Department: </span>{{ form.emp_details?.department }}</li>
+                            <li class="mt-2"><span class="text-muted">Birthday: </span>{{ moment(form.emp_details?.birthdate).format('LL') }}</li>
                             <li class="mt-2"><span class="text-muted">Position: </span>{{ form.emp_details?.designation }}</li>
                             <li class="mt-2"><span class="text-muted">Employment Type: </span>{{ form.emp_details?.employee_type }}</li>
                             <li class="mt-2"><span class="text-muted">Date Hired: </span>{{ moment(form.emp_details?.date_hired).format('LL') }}</li>

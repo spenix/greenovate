@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
@@ -31,16 +32,22 @@ class Employee extends Model
 
     public function deductions(): HasMany
     {
-        return $this->hasMany(Deduction::class, 'employee_id', 'id');
+        return $this->hasMany(Deduction::class, 'employee_id', 'id')->where('status', 'Y');
     }
 
     public function compensations(): HasMany
     {
-        return $this->hasMany(Compensation::class, 'employee_id', 'id');
+        return $this->hasMany(Compensation::class, 'employee_id', 'id')->where('status', 'Y');
     }
 
     public function leave_records(): HasMany
     {
         return $this->hasMany(EmployeeLeave::class, 'employee_id', 'id');
     }
+
+    public function attendance_records(): HasOne
+    {
+        return $this->hasOne(Attendance::class, 'employee_id', 'id');
+    }
+    
 }

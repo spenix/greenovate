@@ -19,6 +19,7 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
     'name_upper' => env('APP_NAME_UPPER', 'Laravel'),
     'name_short' => env('APP_NAME_SHORT', 'Laravel'),
+    'company_address' => env('APP_ADDRESS', 'Laravel'),
     'logo' => env('APP_LOGO', 'Laravel'),
     'logo1' => env('APP_LOGO1', 'Laravel'),
     'app_icon' => env('APP_ICON', 'Laravel'),
@@ -176,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -191,6 +193,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

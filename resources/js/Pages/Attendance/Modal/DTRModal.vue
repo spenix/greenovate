@@ -9,7 +9,7 @@ const emit = defineEmits(["reloadPageData"]);
 const page = usePage()
 const table = ref(null);
 const employees = ref(page.props.employees);
-const shifts = ref(page.props.shifts);
+const shift_codes = ref(page.props.shift_codes);
 const emp_id_select = ref();
 
 const form = useForm({
@@ -18,7 +18,7 @@ const form = useForm({
     employee_name: "",
     department: "",
     employee_type: "",
-    shift: ""
+    shift_code: ""
 });
 
 const props = defineProps({
@@ -72,7 +72,9 @@ watch(props?.modalDTRAttrs, (newValue) => {
                 emp_id_select.value[0].selectize.setValue(data.employee_id)
                 form.id = data.id
                 form.employee_id = data.employee_id
-                form.shift = data?.shift_id;
+                form.shift_code = data?.shift_code_id;
+                console.log(data);
+                console.log(shift_codes.value);
                 reloadDatatable();
             }
         );
@@ -191,32 +193,32 @@ onMounted(() => {
                     <ErrorMessage :message="form.errors.employee_type"/>
                     </div>
                     <div class="col-12 mt-1">
-                    <label for="shift" class="form-label">Shift</label>
+                    <label for="shift_code" class="form-label">Shift Code</label>
                     <select 
-                        id="shift" 
+                        id="shift_code" 
                         class="form-select"
-                        :class="form.errors.shift ? 'error-field' : ''"
-                        v-model="form.shift"
+                        :class="form.errors.shift_code ? 'error-field' : ''"
+                        v-model="form.shift_code"
                         :disabled="props?.modalDTRAttrs?.action == 'DTR'"
                     >
                         <option value="" hidden>
-                            Select Shift
+                            Select Shift Code
                         </option>
                         <option 
                         v-for="(
                             d, i
-                        ) in shifts"
+                        ) in shift_codes"
                         :key="d.id"
                         :value="d.id"
                         :selected="
-                            form.shift ==
+                            form.shift_code ==
                             d?.id
                         "
                         >
-                        {{ d?.name }}
+                        {{ d?.shift }}
                         </option>
                     </select>
-                    <ErrorMessage :message="form.errors.shift"/>
+                    <ErrorMessage :message="form.errors.shift_code"/>
                     </div>
                 </div>
                 </div>

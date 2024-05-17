@@ -16,13 +16,19 @@ use App\Http\Controllers\{
     DeductionController,
     CompensationController,
     EmpBasicSalaryController,
-    LeaveHistoryController
+    LeaveHistoryController,
+    ProjectController,
+    SystemCalendarController,
+    ShiftCodeController,
 };
 use App\Models\Attendance;
 use App\Models\AttendanceAttachment;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
+use App\Models\Sample;
+use App\Models\Project;
+use App\Models\SystemCalendar;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,12 +62,14 @@ Route::get('/dashboard', function () {
         'regularEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 1)->count(),
         'onCallEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 2)->count(),
         'onLeaveEmployee' =>  EmployeeLeave::whereDate('date_start', '>=', now())->whereDate('date_end', '<=', now())->count(),
-        'attendanceCount' =>  AttendanceAttachment::join('attendances', 'attendances.id', 'attendance_attachments.attendance_id')
-            ->whereDate('period_start', '>=', date('Y-m-1'))
-            ->whereDate('period_end', '<=', date('Y-m-t'))
-            ->where('attendances.deleted_at', null)
-            ->get()
-            ->count(),
+        // 'attendanceCount' =>  AttendanceAttachment::join('attendances', 'attendances.id', 'attendance_attachments.attendance_id')
+        //     ->whereDate('period_start', '>=', date('Y-m-1'))
+        //     ->whereDate('period_end', '<=', date('Y-m-t'))
+        //     ->where('attendances.deleted_at', null)
+        //     ->get()
+        //     ->count(),
+        'projects' => Project::where('status', 'Ongoing')->get()->count(),
+        'events' => SystemCalendar::get()
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -188,6 +196,27 @@ Route::middleware('auth')->group(function () {
     Route::post('basic-salary/store', [EmpBasicSalaryController::class, 'store'])->name('basic-salary.store');
     Route::put('basic-salary/update/{id}', [EmpBasicSalaryController::class, 'update'])->name('basic-salary.update');
     Route::delete('basic-salary/destroy/{id}', [EmpBasicSalaryController::class, 'destroy'])->name('basic-salary.destroy');
+
+    Route::get('shift-code', [ShiftCodeController::class, 'index'])->name('shift-code');
+    Route::get('shift-code/show/{id}', [ShiftCodeController::class, 'show']);
+    Route::get('shift-code/show_table_data', [ShiftCodeController::class, 'show_table_data']);
+    Route::post('shift-code/store', [ShiftCodeController::class, 'store'])->name('shift-code.store');
+    Route::put('shift-code/update/{id}', [ShiftCodeController::class, 'update'])->name('shift-code.update');
+    Route::delete('shift-code/destroy/{id}', [ShiftCodeController::class, 'destroy'])->name('shift-code.destroy');
+
+    Route::get('project', [ProjectController::class, 'index'])->name('project');
+    Route::get('project/show/{id}', [ProjectController::class, 'show']);
+    Route::get('project/show_table_data', [ProjectController::class, 'show_table_data']);
+    Route::post('project/store', [ProjectController::class, 'store'])->name('project.store');
+    Route::put('project/update/{id}', [ProjectController::class, 'update'])->name('project.update');
+    Route::delete('project/destroy/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+
+    Route::get('system-calendar', [SystemCalendarController::class, 'index'])->name('system-calendar');
+    Route::get('system-calendar/show/{id}', [SystemCalendarController::class, 'show']);
+    Route::get('system-calendar/show_table_data', [SystemCalendarController::class, 'show_table_data']);
+    Route::post('system-calendar/store', [SystemCalendarController::class, 'store'])->name('system-calendar.store');
+    Route::put('system-calendar/update/{id}', [SystemCalendarController::class, 'update'])->name('system-calendar.update');
+    Route::delete('system-calendar/destroy/{id}', [SystemCalendarController::class, 'destroy'])->name('system-calendar.destroy');
 });
 
 require __DIR__ . '/auth.php';

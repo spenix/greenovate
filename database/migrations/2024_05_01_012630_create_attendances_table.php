@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->unsignedBigInteger('shift_id');
+            $table->unsignedBigInteger('shift_code_id');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('employee_id')->references('id')->on('employees');
-            $table->foreign('shift_id')->references('id')->on('shifts');
+            $table->foreign('shift_code_id')->references('id')->on('shift_codes');
         });
     }
 

@@ -7,11 +7,12 @@ use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\AttendanceAttachment;
 use App\Models\Employee;
-use App\Models\Shift;
+use App\Models\{Shift, ShiftCode};
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DataTables;
 use Illuminate\Support\Facades\Redirect;
+use Excel;
 
 class AttendanceController extends Controller
 {
@@ -35,7 +36,10 @@ class AttendanceController extends Controller
                 'appLogo1' => config('app.logo1', 'Laravel'),
             ],
             'employees' => $data,
-            'shifts' => Shift::where('status', 'Y')->get(),
+            'shift_codes' => ShiftCode::join('shifts', 'shifts.id', 'shift_codes.shift_id')
+            ->where('shift_codes.status', 'Y')
+            ->selectRaw('shift_codes.*, shifts.name as shift')
+            ->get(),
         ]);
     }
 
@@ -43,7 +47,8 @@ class AttendanceController extends Controller
     {
         if ($request->ajax()) {
             $data = Attendance::with(['attachments'])->join('employees', 'employees.id', 'attendances.employee_id')
-                ->join('shifts', 'shifts.id', 'attendances.shift_id')
+                ->join('shift_codes', 'shift_codes.id', 'attendances.shift_code_id')
+                ->join('shifts', 'shifts.id', 'shift_codes.shift_id')
                 ->selectRaw("
                     attendances.*, 
                     employees.employee_no,
@@ -82,7 +87,6 @@ class AttendanceController extends Controller
                 $image_path = $request->file('file_upload')->storeAs('attendance-attachments', $fileName, 'public');
                 $request->file_upload->move(public_path('attendance-attachments'), $fileName);
             }
-
             $payload = [
                 'attendance_id' => $request->id,
                 'attachment_path' => $image_path,
@@ -115,14 +119,14 @@ class AttendanceController extends Controller
         try {
             $payload = [
                 'employee_id' => $request->employee_id,
-                'shift_id' => $request->shift,
+                'shift_code_id' => $request->shift_code,
             ];
 
             $cnt = Attendance::where($payload)->count();
 
             if ($cnt) {
                 return back()->withErrors([
-                    'employee_id' => 'The shift was already exists, please check and try again.',
+                    'employee_id' => 'The shift code was already exists, please check and try again.',
                 ])->onlyInput('employee_id');
             }
             Attendance::create($payload);
@@ -159,13 +163,13 @@ class AttendanceController extends Controller
         try {
             $payload = [
                 'employee_id' => $request->employee_id,
-                'shift_id' => $request->shift,
+                'shift_code_id' => $request->shift_code,
             ];
             //code...
             $isExist = Attendance::where($payload)->where('id', '!=', $id)->count();
             if ($isExist) {
                 return back()->withErrors([
-                    'employee_id' => 'The shift was already exists, please check and try again.',
+                    'employee_id' => 'The shift code was already exists, please check and try again.',
                 ])->onlyInput('employee_id');
             }
             Attendance::find($id)->update($payload);

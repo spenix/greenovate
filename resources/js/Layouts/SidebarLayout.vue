@@ -16,7 +16,14 @@ const user = usePage().props.auth.user;
         </Link>
     </li>
      <!-- End Dashboard -->
-
+     <!-- Calendar -->
+     <li class="nav-item">
+        <Link :href="route('system-calendar')" class="nav-link" :class="page?.url != '/system-calendar' ? 'collapsed' : ''">
+            <i class="bi bi-calendar-event"></i>
+            <span>Event</span>
+        </Link>
+    </li>
+    <!-- End Calendar -->
      <!-- Employees -->
     <li class="nav-item">
         <Link :href="route('employees')" class="nav-link" :class="page?.url != '/employees' ? 'collapsed' : ''">
@@ -25,19 +32,38 @@ const user = usePage().props.auth.user;
         </Link>
     </li>
     <!-- End Employees -->
-
-    <!-- Attendance -->
+    <!-- Projects -->
     <li class="nav-item">
-        <Link :href="route('employee-attendance')" class="nav-link" :class="page?.url != '/employee-attendance' ? 'collapsed' : ''">
-            <i class="ri-calendar-check-line"></i>
-            <span>Attendance</span>
+        <Link :href="route('project')" class="nav-link" :class="page?.url != '/project' ? 'collapsed' : ''">
+            <i class="bi bi-building"></i>
+            <span>Project</span>
         </Link>
     </li>
+    <!-- End Projects -->
+    <!-- Attendance -->
+    <li class="nav-item">
+        <a class="nav-link" :class="['/employee-attendance', '/shift-code'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#attendance-nav" data-bs-toggle="collapse" href="#">
+        <i class="ri-calendar-check-line"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="attendance-nav" class="nav-content collapse " :class="['/employee-attendance', '/shift-code'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <li>
+            <Link :href="route('employee-attendance')" class="nav-link" :class="page?.url == '/employee-attendance' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>DTR</span>
+            </Link>
+        </li>
+        <li>
+            <Link :href="route('shift-code')" class="nav-link" :class="page?.url == '/shift-code' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Shift Code</span>
+            </Link>
+        </li>
+        </ul>
+    </li>
+    
     <!-- End Attendance -->
 
     <!-- Leave -->
     <li class="nav-item">
-        <a class="nav-link" :class="['/employee-leaves', '/leave-types', '/leave-credits'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#leave-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link" :class="['/employee-leaves', '/leave-types', '/leave-credits', '/leave-history'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#leave-nav" data-bs-toggle="collapse" href="#">
         <i class="ri-sailboat-line"></i><span>Leave</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="leave-nav" class="nav-content collapse " :class="['/employee-leaves', '/leave-types', '/leave-credits', '/leave-history'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
@@ -81,11 +107,11 @@ const user = usePage().props.auth.user;
                 <i class="bi bi-circle"></i><span>Payroll List</span>
             </Link>
         </li>
-        <li>
+        <!-- <li>
             <Link :href="route('payslip-report')" class="nav-link" :class="page?.url == '/payslip-report' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Payslip Report</span>
             </Link>
-        </li>
+        </li> -->
         <li>
             <Link :href="route('compensations')" class="nav-link" :class="page?.url == '/compensations' ? 'active' : ''">
                 <i class="bi bi-circle"></i><span>Compensations</span>

@@ -2,7 +2,8 @@
 import HeaderLayout from '@/Layouts/HeaderLayout.vue';
 import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
-import PageModal from '@/Pages/Payroll/Modal/IndexModal.vue';
+import PageModal from '@/Pages/Payroll/Modal/NewPayrollModal.vue';
+import PayslipModal from '@/Pages/Payroll/Modal/PayslipModal.vue';
 import notify from "@/common/notification.js";
 import moment from "moment";
 import { Link, Head, usePage, router } from '@inertiajs/vue3';
@@ -13,6 +14,12 @@ const table = ref({});
 const modalAttrs = ref({
     modalId: "payroll-list-modal",
     title: "PAYROLL",
+    action: "",
+});
+
+const modalPayslipAttrs = ref({
+    modalId: "payslip-modal",
+    title: "PAYSLIP",
     action: "",
 });
 const props = defineProps({
@@ -34,15 +41,15 @@ const reloadDatatable = () => {
             { data: "employee_no", title: "ID No." },
             { data: "employee_name", title: "Employee Name" },
             { 
-                data: "payment_start", 
-                title: "Payment Start",
+                data: "period_start", 
+                title: "Period Start",
                 render(h) {
                     return moment(h).format('L');
                 },  
             },
             { 
-                data: "payment_period", 
-                title: "Payment Period",
+                data: "period_end", 
+                title: "Period End",
                 render(h) {
                     return moment(h).format('L');
                 },  
@@ -53,11 +60,13 @@ const reloadDatatable = () => {
                 orderable: false,
                 searchable: false,
                 render(h, type, row) {
+                    var payslip = `<li class="payslip p-1" title="Payslip"> <a href="#" class="payslip-btn-option blue"><i class="bi bi-card-text" data-id="${h}"></i></a></li>`;
                     var view = `<li class="view p-1" title="View"> <a href="#" class="view-btn-option blue"><i class="bi bi-eye" data-id="${h}"></i></a></li>`;
                     var del = `<li class="delete p-1" title="Delete"><a href="#" class="delete-btn-option red"><i class="bi bi-trash" data-id="${h}"></i></a></li>`;
                     var edit = `<li class="edit p-1" title="Edit"> <a href="#" class="edit-btn-option green"><i class="bi bi-pencil" data-id="${h}"></i></a></li>`;
 
                     return `<ul class="action text-center">
+                                ${payslip}
                                 ${view}
                                 ${edit}
                                 ${del}
@@ -70,6 +79,11 @@ const reloadDatatable = () => {
     setTableBtnAction();
 };
 const setTableBtnAction = () => {
+    $("#payroll-list-table").on("click", ".payslip-btn-option", (e) => {
+        e.stopImmediatePropagation();
+        var id = $(e.target).data("id");
+        btnActionFunc(id, "PAYSLIP");
+    });
     $("#payroll-list-table").on("click", ".view-btn-option", (e) => {
         e.stopImmediatePropagation();
         var id = $(e.target).data("id");
@@ -99,7 +113,19 @@ const btnActionFunc = (id, action) => {
                     : "page-modal"
             }`
         ).modal("show");
-    } else {
+    } 
+    else if (action == "PAYSLIP") {
+        modalPayslipAttrs.value.dataId = id;
+        modalPayslipAttrs.value.action = action;
+        $(
+            `#${
+                modalPayslipAttrs.value?.modalId
+                    ? modalPayslipAttrs.value?.modalId
+                    : "page-modal"
+            }`
+        ).modal("show");
+    }
+    else {
         swal("Are you sure you want to delete data?", {
             buttons: {
                 cancel: "Cancel",
@@ -184,6 +210,9 @@ onMounted(() => {
         <PageModal 
             :modalAttrs="modalAttrs"
             @reloadPageData="reloadDatatableAjax()"
+        />
+        <PayslipModal 
+            :modalAttrs="modalPayslipAttrs"
         />
     </main>
     <FooterLayout :systemSetup="systemSetup"/>
