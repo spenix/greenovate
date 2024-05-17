@@ -64,6 +64,9 @@ class CompensationController extends Controller
             ->join('designations', 'designations.id', 'employees.designation_id')
             ->selectRaw('compensation.id, compensation.start_date, compensation.end_date, employee_types.name as employee_type, departments.name as department, designations.name as designation, CONCAT(employees.firstname, " ", employees.lastname) as employee_name')
             ->get();
+            if ($request->id) {
+                $data->where('compensation.param_benefit_id', $request->id);
+            }
             return datatables::of($data)
                 ->addIndexColumn()
                 ->make(true);

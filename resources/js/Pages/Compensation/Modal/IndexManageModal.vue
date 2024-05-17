@@ -34,10 +34,11 @@ const props = defineProps({
 });
 
 const reloadDatatable = () => {
+    var url_path = `${page.url}/show_compensation_manage_table?id=${form.id}`;
     personnelManageTable.value = $("#manage-personnel-table").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `${page.url}/show_compensation_manage_table`,
+        ajax: url_path,
         columns: [
             { data: "employee_name", title: "Employee Name." },
             { data: "department", title: "Department" },
@@ -162,14 +163,15 @@ watch(props?.modalAttrs, (newValue) => {
                 form.short_code = data?.short_code;
                 form.amount = converToCurrencyFormat(data?.amount);
                 form.status = data?.status == 'Y' ? 'Active' : 'Inactive';
+                setTimeout(() => {reloadDatatable();}, 1000)
             }
         );
     }
 });
 
-onMounted(() => {
-    reloadDatatable();
-})
+// onMounted(() => {
+//     reloadDatatable();
+// })
 </script>
 
 <template>

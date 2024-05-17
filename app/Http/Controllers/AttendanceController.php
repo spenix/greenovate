@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DataTables;
 use Illuminate\Support\Facades\Redirect;
-use Excel;
+// use Excel;
 
 class AttendanceController extends Controller
 {
