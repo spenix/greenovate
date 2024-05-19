@@ -243,26 +243,26 @@ onMounted(() => {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <span v-if="d?.log_record?.clock_in">{{ d?.log_record?.clock_in }}</span>
+                                                    <span v-if="d?.log_record?.clock_in"><small>{{ d?.log_record?.clock_in }}</small></span>
                                                     <span v-else>
                                                         <span class="badge bg-primary" role="button" @click="log_process(d?.employee_id, 'TI')" >T-In</span>
                                                     </span>
                                                     
                                                 </td>
                                                 <td>
-                                                    <span v-if="d?.log_record?.break_out">{{ d?.log_record?.break_out }}</span>
+                                                    <span v-if="d?.log_record?.break_out"><small>{{ d?.log_record?.break_out }}</small></span>
                                                     <span v-else>
                                                         <span class="badge bg-primary" role="button" @click="log_process(d?.employee_id, 'BO')" >B-Out</span>
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span v-if="d?.log_record?.break_in">{{ d?.log_record?.break_in }}</span>
+                                                    <span v-if="d?.log_record?.break_in"><small>{{ d?.log_record?.break_in }}</small></span>
                                                     <span v-else>
                                                         <span class="badge bg-primary" role="button" @click="log_process(d?.employee_id, 'BI')" >B-In</span>
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span v-if="d?.log_record?.clock_out">{{ d?.log_record?.clock_out }}</span>
+                                                    <span v-if="d?.log_record?.clock_out"><small>{{ d?.log_record?.clock_out }}</small></span>
                                                     <span v-else>
                                                         <span class="badge bg-primary" role="button" @click="log_process(d?.employee_id, 'TO')" >T-Out</span>
                                                     </span>

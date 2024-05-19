@@ -66,10 +66,10 @@ class AttendanceRecordController extends Controller
                 attendances.employee_id, 
                 employees.employee_no, 
                 CONCAT(employees.firstname, " ", employees.lastname) as employee_name, 
-                TIME_FORMAT(shift_codes.clock_in, "%r") clock_in,
-                TIME_FORMAT(shift_codes.break_out, "%r") break_out,
-                TIME_FORMAT(shift_codes.break_in, "%r") break_in,
-                TIME_FORMAT(shift_codes.clock_out, "%r") clock_out,
+                TIME_FORMAT(shift_codes.clock_in, "%h:%i %p") clock_in,
+                TIME_FORMAT(shift_codes.break_out, "%h:%i %p") break_out,
+                TIME_FORMAT(shift_codes.break_in, "%h:%i %p") break_in,
+                TIME_FORMAT(shift_codes.clock_out, "%h:%i %p") clock_out,
                 shift_codes.days,
                 shifts.name,
                 departments.name as department,
@@ -86,7 +86,7 @@ class AttendanceRecordController extends Controller
             foreach ($data->get() as $key => $value) {
                 $att_rec = AttendanceRecord::where('employee_id', $value['employee_id'])
                             ->whereDate('date_in', $request->filter_date)
-                            ->selectRaw('clock_in, break_out, break_in, clock_out')
+                            ->selectRaw('TIME_FORMAT(clock_in, "%h:%i %p") clock_in, TIME_FORMAT(break_out, "%h:%i %p") break_out, TIME_FORMAT(break_in, "%h:%i %p") break_in, TIME_FORMAT(clock_out, "%h:%i %p") clock_out')
                             ->first();
                 $log_record = [];
                 if ($att_rec) {
@@ -168,10 +168,10 @@ class AttendanceRecordController extends Controller
             attendances.employee_id, 
             employees.employee_no, 
             CONCAT(employees.firstname, " ", employees.lastname) as employee_name, 
-            TIME_FORMAT(shift_codes.clock_in, "%r") clock_in,
-            TIME_FORMAT(shift_codes.break_out, "%r") break_out,
-            TIME_FORMAT(shift_codes.break_in, "%r") break_in,
-            TIME_FORMAT(shift_codes.clock_out, "%r") clock_out,
+            TIME_FORMAT(shift_codes.clock_in, "%h:%i %p") clock_in,
+            TIME_FORMAT(shift_codes.break_out, "%h:%i %p") break_out,
+            TIME_FORMAT(shift_codes.break_in, "%h:%i %p") break_in,
+            TIME_FORMAT(shift_codes.clock_out, "%h:%i %p") clock_out,
             shift_codes.days,
             shifts.name shift,
             departments.name as department,

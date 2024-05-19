@@ -41,7 +41,7 @@ class AttendanceReportController extends Controller
             $data = AttendanceRecord::where('employee_id', $request->employee)
             ->whereDate('date_in', '>=', $request->period_start)
             ->whereDate('date_in', '<=', $request->period_end)
-            ->selectRaw('date_in, TIME_FORMAT(clock_in, "%r") clock_in, TIME_FORMAT(break_out, "%r") break_out, TIME_FORMAT(break_in, "%r") break_in, TIME_FORMAT(clock_out, "%r") clock_out')
+            ->selectRaw('date_in, TIME_FORMAT(clock_in, "%h:%i %p") clock_in, TIME_FORMAT(break_out, "%h:%i %p") break_out, TIME_FORMAT(break_in, "%h:%i %p") break_in, TIME_FORMAT(clock_out, "%h:%i %p") clock_out')
             ->get();
             return response()->json($data);
         } catch (\Throwable $e) {
