@@ -227,6 +227,7 @@ watch(props?.modalAttrs, (newValue) => {
                     class="form-control text-end" 
                     name="project_cost" 
                     id="project_cost"
+                    maxlength="14"
                     autocomplete="off"
                     @keypress="isNumber($event)" 
                     @blur="

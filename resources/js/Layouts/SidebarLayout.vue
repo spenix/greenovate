@@ -42,13 +42,33 @@ const user = usePage().props.auth.user;
     <!-- End Projects -->
     <!-- Attendance -->
     <li class="nav-item">
-        <a class="nav-link" :class="['/employee-attendance', '/shift-code'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#attendance-nav" data-bs-toggle="collapse" href="#">
-        <i class="ri-calendar-check-line"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link" :class="['/daily-attendance', '/attendance-report'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#attendance-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-calendar-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="attendance-nav" class="nav-content collapse " :class="['/employee-attendance', '/shift-code'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <ul id="attendance-nav" class="nav-content collapse " :class="['/daily-attendance', '/attendance-report'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
         <li>
-            <Link :href="route('employee-attendance')" class="nav-link" :class="page?.url == '/employee-attendance' ? 'active' : ''">
-                <i class="bi bi-circle"></i><span>DTR</span>
+            <Link :href="route('daily-attendance')" class="nav-link" :class="page?.url == '/daily-attendance' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Daily Attendance</span>
+            </Link>
+        </li>
+        <li>
+            <Link :href="route('attendance-report')" class="nav-link" :class="page?.url == '/attendance-report' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Attendance Report</span>
+            </Link>
+        </li>
+        </ul>
+    </li>
+    
+    <!-- End Attendance -->
+    <!-- Shift Management -->
+    <li class="nav-item">
+        <a class="nav-link" :class="['/employee-shift', '/shift-code'].includes(page?.url) ? '' : 'collapsed'" data-bs-target="#shift-management-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-calendar-plus"></i><span>Shift Management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="shift-management-nav" class="nav-content collapse " :class="['/employee-shift', '/shift-code'].includes(page?.url) ? 'show' : ''" data-bs-parent="#sidebar-nav">
+        <li>
+            <Link :href="route('employee-shift')" class="nav-link" :class="page?.url == '/employee-shift' ? 'active' : ''">
+                <i class="bi bi-circle"></i><span>Employee Shift Setup</span>
             </Link>
         </li>
         <li>
@@ -59,7 +79,7 @@ const user = usePage().props.auth.user;
         </ul>
     </li>
     
-    <!-- End Attendance -->
+    <!-- End Shift Management -->
 
     <!-- Leave -->
     <li class="nav-item">

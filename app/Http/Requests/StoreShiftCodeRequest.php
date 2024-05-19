@@ -13,6 +13,7 @@ class StoreShiftCodeRequest extends FormRequest
             "break_out" => date("H:i", strtotime($this->input('break_out'))),
             "break_in" => date("H:i", strtotime($this->input('break_in'))),
             "time_out" => date("H:i", strtotime($this->input('time_out'))),
+            "days" => implode("|",$this->input('days')),
         ]);
     }
     /**
@@ -36,6 +37,7 @@ class StoreShiftCodeRequest extends FormRequest
             'break_out' => 'date_format:H:i|after:time_in',
             'break_in' => 'date_format:H:i|after:break_out',
             'time_out' => 'date_format:H:i|after:break_in',
+            'days' => 'required|string|max:255',
             'status' => 'required|in:Y,N',
         ];
     }

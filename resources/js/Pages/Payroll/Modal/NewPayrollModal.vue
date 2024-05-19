@@ -346,7 +346,6 @@ onMounted(() => {
                             :class="form.errors.period_start ? 'error-field' : ''"
                             v-model="form.period_start"
                             :disabled="props?.modalAttrs?.action == 'VIEW'"
-                            readonly
                           >
                           <ErrorMessage :message="form.errors.period_start"/>
                         </div>
@@ -362,7 +361,6 @@ onMounted(() => {
                             :class="form.errors.period_end ? 'error-field' : ''"
                             v-model="form.period_end"
                             :disabled="props?.modalAttrs?.action == 'VIEW'"
-                            readonly
                           >
                           <ErrorMessage :message="form.errors.period_end"/>
                         </div>

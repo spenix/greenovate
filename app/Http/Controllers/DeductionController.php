@@ -61,14 +61,11 @@ class DeductionController extends Controller
             ->join('employee_types', 'employee_types.id', 'employees.employee_type_id')
             ->join('departments', 'departments.id', 'employees.department_id')
             ->join('designations', 'designations.id', 'employees.designation_id')
-            ->selectRaw('deductions.id, deductions.param_deduction_id, deductions.date_start start_date,  deductions.date_end end_date, employee_types.name as employee_type, departments.name as department, designations.name as designation, CONCAT(employees.firstname, " ", employees.lastname) as employee_name')
-            ->get();
+            ->selectRaw('deductions.id, deductions.param_deduction_id, deductions.date_start start_date,  deductions.date_end end_date, employee_types.name as employee_type, departments.name as department, designations.name as designation, CONCAT(employees.firstname, " ", employees.lastname) as employee_name');
             if ($request->id) {
-               
                 $data->where('param_deduction_id', $request->id);
             }
-            dd($data);
-            return datatables::of($data)
+            return datatables::of($data->get())
                 ->addIndexColumn()
                 ->make(true);
         }

@@ -18,7 +18,7 @@ const modalAttrs = ref({
 });
 const modalDTRAttrs = ref({
     modalId: "dtr-modal",
-    title: "Daily Time Record",
+    title: "Daily Time Record Upload(s)",
     action: "",
 });
 const modalUploadAttrs = ref({
@@ -62,7 +62,7 @@ const reloadDatatable = () => {
                 orderable: false,
                 searchable: false,
                 render(h, type, row) {
-                    var dtr = `<li class="view p-1" title="DTR"> <a href="#" class="dtr-btn-option grey"><i class="ri-file-list-line" data-id="${h}"></i></a></li>`;
+                    var dtr = `<li class="view p-1" title="DTR Uploads"> <a href="#" class="dtr-btn-option grey"><i class="ri-file-list-line" data-id="${h}"></i></a></li>`;
                     var view = `<li class="view p-1" title="View"> <a href="#" class="view-btn-option blue"><i class="bi bi-eye" data-id="${h}"></i></a></li>`;
                     var del = `<li class="delete p-1" title="Delete"><a href="#" class="delete-btn-option red"><i class="bi bi-trash" data-id="${h}"></i></a></li>`;
                     var edit = `<li class="edit p-1" title="Edit"> <a href="#" class="edit-btn-option green"><i class="bi bi-pencil" data-id="${h}"></i></a></li>`;
@@ -190,25 +190,25 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Attendance" />
+    <Head title="Employee Shift Setup" />
     <HeaderLayout :systemSetup="systemSetup"/>
     <SidebarLayout />
     <main id="main" class="main">
         <div class="pagetitle">
-        <h1>Attendance</h1>
+        <h1>Employee Shift Setup</h1>
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <Link :href="route('dashboard')">Home</Link>
             </li>
-            <li class="breadcrumb-item active">Attendance</li>
+            <li class="breadcrumb-item active">Employee Shift Setup</li>
             </ol>
         </nav>
         </div>
         <section class="section">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Attendance List</h5>
+                <h5 class="card-title">Employee Shift List</h5>
                 <div class="row">
                     <div class="col-12 p-2 text-end">
                         <button type="button" class="btn btn-primary btn-sm" @click="btnActionFunc('', 'ADD')">Add Shift</button>

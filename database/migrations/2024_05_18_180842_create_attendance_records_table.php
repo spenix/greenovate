@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payrolls', function (Blueprint $table) {
+        Schema::create('attendance_records', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->decimal('basic_salary', 12, 2)->default(0);
-            $table->decimal('working_hours', 8, 2)->default(0);
-            $table->decimal('working_days', 8, 2)->default(0);
-            $table->decimal('ot_hours', 8, 2)->default(0);
-            $table->decimal('ot_compensation', 8, 2)->default(0);
-            $table->date('period_start');
-            $table->date('period_end');
+            $table->date('date_in');
+            $table->time('clock_in')->nullable();
+            $table->time('break_out')->nullable();
+            $table->time('break_in')->nullable();
+            $table->time('clock_out')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('employee_id')->references('id')->on('employees');
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payrolls');
+        Schema::dropIfExists('attendance_records');
     }
 };

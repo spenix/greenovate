@@ -12,19 +12,18 @@ const regularEmployee = ref(page.props.regularEmployee);
 const terminatedEmployee = ref(page.props.terminatedEmployee);
 const onCallEmployee = ref(page.props.onCallEmployee);
 const onLeaveEmployee = ref(page.props.onLeaveEmployee);
+const event_today = ref(page.props.event_today);
 const projects = ref(page.props.projects);
+const systemSetup = ref(page.props.systemSetup);
+
 const calendarOptions = ref({
         plugins: [dayGridPlugin],
         initialView: 'dayGridMonth',
-        weekends: false,
+        weekends: true,
         events: page.props.events.map(d => { return {title: d?.name, start: d?.start_date, end: d?.end_date}})
       });
+console.log('event_today', event_today.value);
 
-defineProps({
-    systemSetup: {
-        type: Object,
-    },
-});
 </script>
 
 <template>
@@ -45,7 +44,13 @@ defineProps({
         </div>
         <section class="section dashboard">
             <div class="row">
-            
+                <div class="col-lg-12 mb-2">
+                    <div class="alert alert-primary alert-dismissible fade show" v-for="(d, i) in event_today" :key="i" role="alert">
+                        <i class="bi bi-star me-1"></i>
+                        {{ `${d.name} - ${d.description}` }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
                 <div class="col-lg-12">
                     <div class="row">
                         <!-- Sales Card -->

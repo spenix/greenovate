@@ -20,6 +20,8 @@ use App\Http\Controllers\{
     ProjectController,
     SystemCalendarController,
     ShiftCodeController,
+    AttendanceReportController,
+    AttendanceRecordController
 };
 use App\Models\Attendance;
 use App\Models\AttendanceAttachment;
@@ -31,7 +33,7 @@ use App\Models\Project;
 use App\Models\SystemCalendar;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,6 +53,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    $dt = Carbon::now()->setTimezone('Asia/Manila');
+    // dd($dt->dayName);
     return Inertia::render('Dashboard', [
         'systemSetup' => [
             'nameShort' => config('app.name_short', 'Laravel'),
@@ -61,7 +65,7 @@ Route::get('/dashboard', function () {
         'terminatedEmployee' =>  Employee::where('terminate', 'Y')->get()->count(),
         'regularEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 1)->count(),
         'onCallEmployee' =>  Employee::join('employee_types', 'employee_types.id', 'employees.employee_type_id')->where('employee_types.id', 2)->count(),
-        'onLeaveEmployee' =>  EmployeeLeave::whereDate('date_start', '>=', now())->whereDate('date_end', '<=', now())->count(),
+        'onLeaveEmployee' =>  EmployeeLeave::whereDate('date_start', '>=', $dt)->whereDate('date_end', '<=', $dt)->count(),
         // 'attendanceCount' =>  AttendanceAttachment::join('attendances', 'attendances.id', 'attendance_attachments.attendance_id')
         //     ->whereDate('period_start', '>=', date('Y-m-1'))
         //     ->whereDate('period_end', '<=', date('Y-m-t'))
@@ -69,7 +73,8 @@ Route::get('/dashboard', function () {
         //     ->get()
         //     ->count(),
         'projects' => Project::where('status', 'Ongoing')->get()->count(),
-        'events' => SystemCalendar::get()
+        'events' => SystemCalendar::get(),
+        'event_today' => SystemCalendar::whereDate('start_date', '>=', $dt)->whereDate('end_date', '<=', $dt)->get(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -86,14 +91,14 @@ Route::middleware('auth')->group(function () {
     Route::post('employees/terminate/{id}/{status}', [EmployeeController::class, 'terminate'])->name('employees.terminate');
     Route::delete('employees/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
-    Route::get('employee-attendance', [AttendanceController::class, 'index'])->name('employee-attendance');
-    Route::get('employee-attendance/show/{id}', [AttendanceController::class, 'show']);
-    Route::get('employee-attendance/show_table_data', [AttendanceController::class, 'show_table_data']);
-    Route::get('employee-attendance/show_dtr_table_data', [AttendanceController::class, 'show_dtr_table_data']);
-    Route::post('employee-attendance/store', [AttendanceController::class, 'store'])->name('employee-attendance.store');
+    Route::get('employee-shift', [AttendanceController::class, 'index'])->name('employee-shift');
+    Route::get('employee-shift/show/{id}', [AttendanceController::class, 'show']);
+    Route::get('employee-shift/show_table_data', [AttendanceController::class, 'show_table_data']);
+    Route::get('employee-shift/show_dtr_table_data', [AttendanceController::class, 'show_dtr_table_data']);
+    Route::post('employee-shift/store', [AttendanceController::class, 'store'])->name('employee-shift.store');
     Route::post('upload-attendance', [AttendanceController::class, 'upload_attendance'])->name('upload-attendance');
-    Route::put('employee-attendance/update/{id}', [AttendanceController::class, 'update'])->name('employee-attendance.update');
-    Route::delete('employee-attendance/destroy/{id}', [AttendanceController::class, 'destroy'])->name('employee-attendance.destroy');
+    Route::put('employee-shift/update/{id}', [AttendanceController::class, 'update'])->name('employee-shift.update');
+    Route::delete('employee-shift/destroy/{id}', [AttendanceController::class, 'destroy'])->name('employee-shift.destroy');
 
     Route::get('employee-leaves', [EmployeeLeaveController::class, 'index'])->name('employee-leaves');
     Route::get('employee-leaves/show/{id}', [EmployeeLeaveController::class, 'show']);
@@ -217,6 +222,23 @@ Route::middleware('auth')->group(function () {
     Route::post('system-calendar/store', [SystemCalendarController::class, 'store'])->name('system-calendar.store');
     Route::put('system-calendar/update/{id}', [SystemCalendarController::class, 'update'])->name('system-calendar.update');
     Route::delete('system-calendar/destroy/{id}', [SystemCalendarController::class, 'destroy'])->name('system-calendar.destroy');
+
+    Route::get('daily-attendance', [AttendanceRecordController::class, 'index'])->name('daily-attendance');
+    Route::get('daily-attendance/show/{id}', [AttendanceRecordController::class, 'show']);
+    Route::get('daily-attendance/show_table_data', [AttendanceRecordController::class, 'show_table_data']);
+    Route::post('daily-attendance/get_employees_with_shift', [AttendanceRecordController::class, 'get_employees_with_shift'])->name('daily-attendance.get-employees-with-shift');
+    Route::post('daily-attendance/log_process', [AttendanceRecordController::class, 'log_process'])->name('daily-attendance.log-process');
+    Route::post('daily-attendance/store', [AttendanceRecordController::class, 'store'])->name('daily-attendance.store');
+    Route::put('daily-attendance/update/{id}', [AttendanceRecordController::class, 'update'])->name('daily-attendance.update');
+    Route::delete('daily-attendance/destroy/{id}', [AttendanceRecordController::class, 'destroy'])->name('daily-attendance.destroy');
+    
+    Route::get('attendance-report', [AttendanceReportController::class, 'index'])->name('attendance-report');
+    Route::get('attendance-report/show/{id}', [AttendanceReportController::class, 'show']);
+    Route::get('attendance-report/show_table_data', [AttendanceReportController::class, 'show_table_data']);
+    Route::post('attendance-report/store', [AttendanceReportController::class, 'store'])->name('attendance-report.store');
+    Route::post('attendance-report/get_employee_dtr_rec', [AttendanceReportController::class, 'get_employee_dtr_rec'])->name('attendance-report.get-employee-dtr-rec');
+    Route::put('attendance-report/update/{id}', [AttendanceReportController::class, 'update'])->name('attendance-report.update');
+    Route::delete('attendance-report/destroy/{id}', [AttendanceReportController::class, 'destroy'])->name('attendance-report.destroy');
 });
 
 require __DIR__ . '/auth.php';

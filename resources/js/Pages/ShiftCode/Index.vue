@@ -31,6 +31,13 @@ const reloadDatatable = () => {
         ajax: `${page.url}/show_table_data`,
         columns: [
             { data: "shift", title: "Shift Code" },
+            { 
+                data: "days", 
+                title: "Days", 
+                render(h, type, row) {
+                    return h.replaceAll("|", "<br>")
+                }
+            },
             { data: "status", title: "Status" },
             {
                 data: "id",
@@ -139,7 +146,7 @@ onMounted(() => {
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <Link :href="route('employee-attendance')">Attendance</Link>
+                <Link :href="route('employee-shift')">Attendance</Link>
             </li>
             <li class="breadcrumb-item active">Shift Codes</li>
             </ol>

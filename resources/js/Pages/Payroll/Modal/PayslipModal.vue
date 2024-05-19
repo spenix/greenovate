@@ -45,7 +45,6 @@ watch(props?.modalAttrs, (newValue) => {
     if (newValue?.action != "ADD") {
         http.get(`${page?.url}/show/${newValue?.dataId}`).then(
             ({ data, status }) => {
-                console.log(data);
                 form.detail = data
                 
                 var basic_salary = parseFloat(data?.basic_salary)

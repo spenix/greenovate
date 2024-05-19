@@ -25,6 +25,7 @@ class ShiftCodeController extends Controller
                 'appLogo1' => config('app.logo1', 'Laravel'),
             ],
             'shifts' => Shift::where('status', 'Y')->get(),
+            'days_list' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         ]);
     }
 
@@ -32,7 +33,7 @@ class ShiftCodeController extends Controller
     {
         if ($request->ajax()) {
             $data = ShiftCode::join('shifts', 'shifts.id', 'shift_codes.shift_id')
-            ->selectRaw('shift_codes.id, shifts.name shift, IF(shift_codes.status = "Y", "Active", "Inactive") status')->get();
+            ->selectRaw('shift_codes.id, shifts.name shift, IF(shift_codes.status = "Y", "Active", "Inactive") status, shift_codes.days')->get();
             return datatables::of($data)
                 ->addIndexColumn()
                 ->make(true);
@@ -65,6 +66,7 @@ class ShiftCodeController extends Controller
             $payload['break_out'] = $request->break_out;
             $payload['break_in'] = $request->break_in;
             $payload['clock_out'] = $request->time_out;
+            $payload['days'] = $request->days;
             $payload['status'] = $request->status;
             ShiftCode::create($payload);
             return Redirect::route('shift-code');
@@ -110,6 +112,7 @@ class ShiftCodeController extends Controller
             $payload['break_out'] = $request->break_out;
             $payload['break_in'] = $request->break_in;
             $payload['clock_out'] = $request->time_out;
+            $payload['days'] = $request->days;
             $payload['status'] = $request->status;
             ShiftCode::find($id)->update($payload);
             return Redirect::route('shift-code');

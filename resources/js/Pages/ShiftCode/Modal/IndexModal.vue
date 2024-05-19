@@ -8,6 +8,7 @@ const emit = defineEmits(["reloadPageData"]);
 const page = usePage()
 
 const shifts = ref(page.props.shifts);
+const days_list = ref(page.props.days_list);
 const form = useForm({
     id: "",
     shift: "",
@@ -15,6 +16,7 @@ const form = useForm({
     break_out: "",
     break_in: "",
     time_out: "",
+    days: [],
     status: "Y"
 });
 
@@ -89,6 +91,7 @@ watch(props?.modalAttrs, (newValue) => {
               form.break_out = data?.break_out
               form.break_in = data?.break_in
               form.time_out = data?.clock_out
+              form.days = data?.days?.split("|")
               form.status = data?.status
             }
         );
@@ -191,6 +194,16 @@ watch(props?.modalAttrs, (newValue) => {
                     :disabled="props?.modalAttrs?.action == 'VIEW'"
                   >
                   <ErrorMessage :message="form.errors.time_out"/>
+                </div>
+                <div class="col-12 mt-1">
+                  <label for="days" class="form-label">Days <span v-if="form.days.length">{{ form.days }}</span></label>
+                  <div class="form-check" v-for="(d, i) in days_list" :key="i">
+                      <input class="form-check-input" type="checkbox" :id="`day_${i}`" :value="d" v-model="form.days">
+                      <label class="form-check-label" :for="`day_${i}`">
+                        {{ d }}
+                      </label>
+                    </div>
+                  <ErrorMessage :message="form.errors.days"/>
                 </div>
                 <div class="col-12 mt-1">
                   <label class="form-label">Status</label>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('emp_basic_salaries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('designation_id');
-            $table->decimal('basic_salary', 10, 2)->default(0);
+            $table->decimal('basic_salary', 12, 2)->default(0);
             $table->enum('status', ['Y', 'N'])->default('Y');
             $table->timestamps();
             $table->softDeletes();

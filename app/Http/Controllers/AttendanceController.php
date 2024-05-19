@@ -95,7 +95,7 @@ class AttendanceController extends Controller
             ];
 
             AttendanceAttachment::create($payload);
-            return Redirect::route('employee-attendance');
+            return Redirect::route('employee-shift');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([
                 'errorMessage' => $e->getMessage(),
@@ -119,18 +119,18 @@ class AttendanceController extends Controller
         try {
             $payload = [
                 'employee_id' => $request->employee_id,
-                'shift_code_id' => $request->shift_code,
             ];
 
             $cnt = Attendance::where($payload)->count();
 
             if ($cnt) {
                 return back()->withErrors([
-                    'employee_id' => 'The shift code was already exists, please check and try again.',
+                    'employee_id' => 'The employee was already exists, please check and try again.',
                 ])->onlyInput('employee_id');
             }
+            $payload['shift_code_id'] = $request->shift_code;
             Attendance::create($payload);
-            return Redirect::route('employee-attendance');
+            return Redirect::route('employee-shift');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([
                 'errorMessage' => $e->getMessage(),
@@ -163,17 +163,17 @@ class AttendanceController extends Controller
         try {
             $payload = [
                 'employee_id' => $request->employee_id,
-                'shift_code_id' => $request->shift_code,
             ];
             //code...
             $isExist = Attendance::where($payload)->where('id', '!=', $id)->count();
             if ($isExist) {
                 return back()->withErrors([
-                    'employee_id' => 'The shift code was already exists, please check and try again.',
+                    'employee_id' => 'The employee was already exists, please check and try again.',
                 ])->onlyInput('employee_id');
             }
+            $payload['shift_code_id'] = $request->shift_code;
             Attendance::find($id)->update($payload);
-            return Redirect::route('employee-attendance');
+            return Redirect::route('employee-shift');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([
                 'errorMessage' => $e->getMessage(),
@@ -188,7 +188,7 @@ class AttendanceController extends Controller
     {
         try {
             $attendance::find($id)->delete();
-            return Redirect::route('employee-attendance');
+            return Redirect::route('employee-shift');
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors([
                 'errorMessage' => $e->getMessage(),

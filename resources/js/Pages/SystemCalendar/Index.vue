@@ -4,6 +4,7 @@ import SidebarLayout from '@/Layouts/SidebarLayout.vue';
 import FooterLayout from '@/Layouts/FooterLayout.vue';
 import PageModal from '@/Pages/SystemCalendar/Modal/IndexModal.vue';
 import notify from "@/common/notification.js";
+import moment from "moment";
 import { Link, Head, usePage, router } from '@inertiajs/vue3';
 import { onMounted, ref} from "vue";
 
@@ -32,6 +33,20 @@ const reloadDatatable = () => {
         columns: [
             { data: "name", title: "Title" },
             { data: "description", title: "Description" },
+            { 
+                data: "start_date", 
+                title: "Start Date",  
+                render(h, type, row) {
+                        return moment(h).format('L');
+                    }  
+            },
+            { 
+                data: "end_date", 
+                title: "End Date",  
+                render(h, type, row) {
+                        return moment(h).format('L');
+                    }  
+            },
             {
                 data: "id",
                 title: "Action",

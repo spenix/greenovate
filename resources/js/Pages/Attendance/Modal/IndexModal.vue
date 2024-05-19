@@ -32,7 +32,7 @@ const props = defineProps({
 
 const submitData = () => {
   if (props?.modalAttrs?.action == "EDIT") {
-        form.put(route('employee-attendance.update', [form.id]), {
+        form.put(route('employee-shift.update', [form.id]), {
             preserveScroll: true,
             onSuccess: () => resetFormData(),
             onError: () => {
@@ -46,7 +46,7 @@ const submitData = () => {
             },
         });
     } else {
-        form.post(route('employee-attendance.store'), {
+        form.post(route('employee-shift.store'), {
             preserveScroll: true,
             onSuccess: () => resetFormData(),
             onError: () => {
@@ -91,7 +91,7 @@ watch(props?.modalAttrs, (newValue) => {
                 emp_id_select.value[0].selectize.setValue(data.employee_id)
                 form.id = data.id
                 form.employee_id = data.employee_id
-                form.shift = data?.shift_id;
+                form.shift_code = data?.shift_code_id;
             }
         );
     }

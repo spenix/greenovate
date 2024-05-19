@@ -1271,3 +1271,7 @@ ul.action {
 ul.action li {
   display: inline;
 }
+
+.top-70 {
+  top: 70% !important;
+}

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('tin', 100)->nullable();
             $table->string('pag_ibig', 100)->nullable();
             $table->string('philhealth', 100)->nullable();
-            $table->decimal('rate', 10, 2)->default(0);
+            $table->decimal('rate', 12, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('blood_type_id')->references('id')->on('blood_types');

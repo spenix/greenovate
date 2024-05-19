@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('location');
             $table->string('client_name');
             $table->text('description')->nullable();
-            $table->decimal('project_cost', 8, 2)->default(0);
+            $table->decimal('project_cost', 12, 2)->default(0);
             $table->date('start_date');
             $table->date('end_date');
             $table->enum('status', ['Pending', 'Ongoing', 'Done', 'Cancelled']);
